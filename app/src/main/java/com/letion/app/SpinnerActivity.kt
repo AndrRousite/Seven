@@ -26,6 +26,8 @@ import com.weyee.poscore.mvp.BaseModel
 import com.weyee.poscore.mvp.BasePresenter
 import com.weyee.poscore.mvp.IView
 import com.weyee.sdk.router.Path
+import com.weyee.sdk.toast.ToastUtils
+import kotlinx.android.synthetic.main.activity_spinner.*
 
 @Route(path = Path.MAIN + "Spinner")
 class SpinnerActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
@@ -35,6 +37,7 @@ class SpinnerActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
     override fun getResourceId(): Int = R.layout.activity_spinner
 
     override fun initView(savedInstanceState: Bundle?) {
+        spinnerView.setOnItemSelectedListener { _, _, _, item -> ToastUtils.show(item) }
     }
 
     override fun initData(savedInstanceState: Bundle?) {

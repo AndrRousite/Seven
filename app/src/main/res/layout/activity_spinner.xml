@@ -33,6 +33,7 @@
 
     <com.weyee.poswidget.spinner.MaterialSpinner style="@style/Material.SpinnerStyle"
                                                  app:ms_entries="@array/sort_mode_entry"
+                                                 android:id="@+id/spinnerView"
                                                  android:layout_marginTop="20dp"/>
 
 

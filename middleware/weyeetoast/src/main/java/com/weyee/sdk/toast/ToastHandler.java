@@ -23,7 +23,7 @@ final class ToastHandler extends Handler {
     private static final int TYPE_CANCEL = 3; // 取消显示
 
     // 最大吐司的容量
-    private static final int MAX_TOAST_CAPACITY = 5;
+    private static final int MAX_TOAST_CAPACITY = 2;
 
     // 吐司队列
     private volatile Queue<CharSequence> mQueue = new ArrayBlockingQueue<>(MAX_TOAST_CAPACITY);
@@ -74,7 +74,7 @@ final class ToastHandler extends Handler {
                     mToast.setText(text);
                     mToast.show();
                     // 等这个 Toast 显示完后再继续显示
-                    sendEmptyMessageDelayed(TYPE_CONTINUE, getToastDuration(text) + 1000);
+                    sendEmptyMessageDelayed(TYPE_CONTINUE, getToastDuration(text));
                 } else {
                     isShow = false;
                 }
