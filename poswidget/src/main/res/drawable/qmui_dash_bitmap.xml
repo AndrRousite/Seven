@@ -16,16 +16,13 @@
   ~  imitations under the License.
   ~
   -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="line">
+    <size android:height="1dp"/>
+    <stroke
+            android:dashGap="3dp"
+            android:dashWidth="8dp"
+            android:width="1dp"
+            android:color="@color/config_color_driver"/>
 
-<resources>
-    <style name="WidgetBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="config_size_edittext_radius">4dp</item>
-        <item name="ms_item_height_size">30dp</item>
-        <item name="ms_dropdown_max_height">300dp</item>
-        <item name="config_size_spinner_text">13sp</item>
-        <item name="ms_padding_left_size">8dp</item>
-        <item name="ms_padding_top_size">6.5dp</item>
-        <item name="ms_dropdown_offset">1dp</item>
-    </style>
-
-</resources>
+</shape>

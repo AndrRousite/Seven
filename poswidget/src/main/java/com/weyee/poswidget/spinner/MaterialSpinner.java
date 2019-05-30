@@ -113,7 +113,7 @@ public class MaterialSpinner extends AppCompatTextView {
             mArrowColorDisabled = ResUtils.lighter(mArrowColor, 0.8f);
             mEntriesID = ta.getResourceId(R.styleable.MaterialSpinner_ms_entries, 0);
             mDropDownBg = ta.getDrawable(R.styleable.MaterialSpinner_ms_dropdown_bg);
-            mIsInDialog = ta.getBoolean(R.styleable.MaterialSpinner_ms_in_dialog, false);
+            mIsInDialog = ta.getBoolean(R.styleable.MaterialSpinner_ms_in_dialog, true);
 
         } finally {
             ta.recycle();
@@ -515,6 +515,8 @@ public class MaterialSpinner extends AppCompatTextView {
         } else {
             setText("");
         }
+        // 重新计算popupWindow的高度
+        //mPopupWindow.setHeight(calculatePopupWindowHeight());
     }
 
     /**

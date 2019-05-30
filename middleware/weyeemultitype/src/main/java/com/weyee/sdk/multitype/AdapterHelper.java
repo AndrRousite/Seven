@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author wuqi by 2019/3/21.
  */
-interface AdapterHelper<T> {
+public interface AdapterHelper<T> {
 
     boolean addAll(@Nullable List<T> list);
 

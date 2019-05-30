@@ -1,10 +1,12 @@
 package com.wuqi.a_service.wan
 
+import cn.hutool.core.util.RandomUtil
 import com.weyee.poscore.di.scope.ActivityScope
 import com.weyee.poscore.mvp.BasePresenter
 import com.weyee.possupport.arch.RxLiftUtils
 import com.weyee.sdk.api.observer.ProgressSubscriber
 import com.weyee.sdk.api.observer.transformer.Transformer
+import com.weyee.sdk.toast.ToastUtils
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Function
@@ -36,7 +38,9 @@ class LotteryPresenter @Inject constructor(model: LotteryModel?, rootView: Lotte
             .`as`(RxLiftUtils.bindLifecycle(lifecycleOwner))
             .subscribe(object : ProgressSubscriber<List<LotteryWapperCategoryAndInfo>>() {
                 override fun onSuccess(t: List<LotteryWapperCategoryAndInfo>?) {
-                    mView.setHomeData(t)
+                    if (mView is LotteryContract.LotteryView) {
+                        (mView as LotteryContract.LotteryView).setHomeData(t)
+                    }
                 }
 
                 override fun onCompleted() {
@@ -87,8 +91,110 @@ class LotteryPresenter @Inject constructor(model: LotteryModel?, rootView: Lotte
             .`as`(RxLiftUtils.bindLifecycle(lifecycleOwner))
             .subscribe(object : ProgressSubscriber<LotteryBonus>() {
                 override fun onSuccess(t: LotteryBonus?) {
+                    ToastUtils.show(t?.prize_msg)
                 }
-
             })
+    }
+
+    /**
+     * 获取期数信息
+     */
+    fun periods(lastPeriod: Int): List<String> {
+        val list = mutableListOf<String>()
+        for (i in 0 until 30) {
+            val data = lastPeriod - i
+            list.add("$data")
+        }
+        return list
+    }
+
+    /**
+     * 根据lottery_id 生成红球
+     */
+    fun reds(lottery_id: String?): List<BallBean> {
+        val list = mutableListOf<BallBean>()
+        when (lottery_id) {
+            "ssq" -> {
+                for (i in 1..33) {
+                    list.add(BallBean(String.format("%2d", i), false))
+                }
+            }
+            "dlt" -> {
+                for (i in 1..35) {
+                    list.add(BallBean(String.format("%2d", i), false))
+                }
+            }
+        }
+        return list
+    }
+
+    /**
+     * 根据lottery_id 生成篮球
+     */
+    fun blues(lottery_id: String?): List<BallBean> {
+        val list = mutableListOf<BallBean>()
+        when (lottery_id) {
+            "ssq" -> {
+                for (i in 1..16) {
+                    list.add(BallBean(String.format("%2d", i), false))
+                }
+            }
+            "dlt" -> {
+                for (i in 1..12) {
+                    list.add(BallBean(String.format("%2d", i), false))
+                }
+            }
+        }
+        return list
+    }
+
+    /**
+     * 查询是否中奖
+     */
+    fun lotteryRes(lottery_id: String?, reds: List<BallBean>?, blues: List<BallBean>?): String? {
+        val tempReds = reds?.filter { it.selected }
+        val tempBlues = blues?.filter { it.selected }
+        when (lottery_id) {
+            "ssq" -> {
+
+                if (tempReds?.size ?: 0 >= 6 && tempBlues?.isNotEmpty() == true) {
+                    val sb = StringBuilder()
+                    tempReds?.forEach { sb.append(it.data).append(",") }
+                        .apply { if (sb.isNotEmpty()) sb.delete(sb.length - 1, sb.length).append("@") }
+
+                    tempBlues.forEach { sb.append(it.data).append(",") }
+                        .apply { if (sb.isNotEmpty()) sb.delete(sb.length - 1, sb.length) }
+                    return sb.toString()
+                }
+            }
+            "dlt" -> {
+                if (tempReds?.size ?: 0 >= 5 && tempBlues?.size ?: 0 >= 2) {
+                    val sb = StringBuilder()
+                    tempReds?.forEach { sb.append(it.data).append(",") }
+                        .apply { if (sb.isNotEmpty()) sb.delete(sb.length - 1, sb.length).append("@") }
+
+                    tempBlues?.forEach { sb.append(it.data).append(",") }
+                        .apply { if (sb.isNotEmpty()) sb.delete(sb.length - 1, sb.length) }
+                    return sb.toString()
+                }
+            }
+        }
+        return null
+
+    }
+
+    fun lotteryRandom(lottery_id: String?, reds: List<BallBean>?, blues: List<BallBean>?) {
+        reds?.forEach { it.selected = false }
+        blues?.forEach { it.selected = false }
+        when (lottery_id) {
+            "ssq" -> {
+                RandomUtil.randomEles(reds, 6).forEach { it.selected = true }
+                RandomUtil.randomEles(blues, 1).forEach { it.selected = true }
+            }
+            "dlt" -> {
+                RandomUtil.randomEles(reds, 5).forEach { it.selected = true }
+                RandomUtil.randomEles(blues, 2).forEach { it.selected = true }
+            }
+        }
     }
 }

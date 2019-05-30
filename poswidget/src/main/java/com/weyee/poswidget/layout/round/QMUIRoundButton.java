@@ -63,6 +63,6 @@ public class QMUIRoundButton extends QMUIAlphaButton {
         QMUIRoundButtonDrawable bg = QMUIRoundButtonDrawable.fromAttributeSet(context, attrs, defStyleAttr);
         QMUIViewHelper.setBackgroundKeepingPadding(this, bg);
         setChangeAlphaWhenDisable(false);
-        setChangeAlphaWhenPress(false);
+        setChangeAlphaWhenPress(true);
     }
 }

@@ -10,9 +10,14 @@ import io.reactivex.Observable
  */
 interface LotteryContract {
     interface View : IView {
-        fun setHomeData(list: List<LotteryWapperCategoryAndInfo>?)
         fun onCompleted()
     }
+
+    interface LotteryView : View{
+        fun setHomeData(list: List<LotteryWapperCategoryAndInfo>?)
+    }
+
+    interface MachineView : View
 
     interface Model : IModel {
         fun lotterys(): Observable<List<LotteryCategory>>

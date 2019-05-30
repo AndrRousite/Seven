@@ -6,7 +6,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
         android:ellipsize="marquee"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:minHeight="?attr/ms_item_height_size"
         android:paddingBottom="?attr/ms_padding_top_size"
         android:paddingLeft="?attr/ms_padding_left_size"

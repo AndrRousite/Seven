@@ -53,4 +53,11 @@ public class WorkerNavigation extends Navigation {
     public void toLotteryActivity() {
         startActivity("Lottery");
     }
+
+    public void toMachineActivity(int last_period, String lottery_id) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("last_period", last_period);
+        bundle.putString("lottery_id", lottery_id);
+        startActivity("Machine", bundle);
+    }
 }

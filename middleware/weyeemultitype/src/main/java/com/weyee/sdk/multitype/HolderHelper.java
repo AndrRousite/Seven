@@ -8,7 +8,7 @@ import android.view.View;
 /**
  * @author wuqi by 2019/3/21.
  */
-public interface HolderHelper<VH extends BaseHolder> {
+public interface HolderHelper<VH> {
     /**
      * 设置textView文本内容
      *

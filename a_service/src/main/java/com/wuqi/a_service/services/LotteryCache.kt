@@ -29,7 +29,7 @@ interface LotteryCache {
     /**
      * 当期开奖结果查询
      */
-    @LifeCache(duration = 2, timeUnit = TimeUnit.HOURS)
+    @LifeCache(duration = 5, timeUnit = TimeUnit.HOURS)
     fun infos(
         info: Observable<InfoCache>,
         dynamicKey: DynamicKey,
@@ -39,7 +39,7 @@ interface LotteryCache {
     /**
      * 历史开奖结果列表
      */
-    @LifeCache(duration = 2, timeUnit = TimeUnit.HOURS)
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     fun historys(
         history: Observable<HistoryCache>,
         dynamicKey: DynamicKey,

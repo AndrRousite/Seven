@@ -4,20 +4,19 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
-import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.GridView
-import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.SizeUtils
 import com.weyee.poscore.base.BaseActivity
 import com.weyee.poscore.di.component.AppComponent
+import com.weyee.poswidget.textview.ball.BallTextView
 import com.weyee.sdk.multitype.BaseAdapter
 import com.weyee.sdk.multitype.BaseHolder
 import com.weyee.sdk.multitype.HorizontalDividerItemDecoration
 import com.weyee.sdk.router.Path
-import com.weyee.sdk.toast.ToastUtils
+import com.weyee.sdk.router.WorkerNavigation
+import com.weyee.sdk.util.number.MNumberUtil
 import com.wuqi.a_service.di.DaggerLotteryComponent
 import com.wuqi.a_service.di.LotteryModule
 import com.wuqi.a_service.wan.LotteryContract
@@ -27,7 +26,7 @@ import kotlinx.android.synthetic.main.activity_lottery.*
 
 
 @Route(path = Path.Service + "Lottery")
-class LotteryActivity : BaseActivity<LotteryPresenter>(), LotteryContract.View {
+class LotteryActivity : BaseActivity<LotteryPresenter>(), LotteryContract.LotteryView {
 
     override fun setupActivityComponent(appComponent: AppComponent?) {
         DaggerLotteryComponent
@@ -54,8 +53,11 @@ class LotteryActivity : BaseActivity<LotteryPresenter>(), LotteryContract.View {
             ).build()
         )
         recyclerView.adapter =
-            object : BaseAdapter<LotteryWapperCategoryAndInfo>(null, { view, viewType, data, position ->
-                ToastUtils.show(data.category.lottery_name)
+            object : BaseAdapter<LotteryWapperCategoryAndInfo>(null, { _, _, data, _ ->
+                WorkerNavigation(context).toMachineActivity(
+                    MNumberUtil.convertToint(null),
+                    data.category.lottery_id
+                )
             }) {
                 override fun getHolder(v: View, viewType: Int): BaseHolder<LotteryWapperCategoryAndInfo> {
                     return object : BaseHolder<LotteryWapperCategoryAndInfo>(v) {
@@ -81,19 +83,28 @@ class LotteryActivity : BaseActivity<LotteryPresenter>(), LotteryContract.View {
                             )
 
                             val gridView = getView<GridView>(R.id.gridView)
+                            gridView.isPressed = false
+                            gridView.isEnabled = false
+                            gridView.isClickable = false
                             val balls = data.info.lottery_res.split(",")
                             gridView.adapter =
-                                object : ArrayAdapter<String>(itemView.context, R.layout.item_lottery_ball, balls) {
-                                    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                                        val view = super.getView(position, convertView, parent)
+                                object : com.weyee.sdk.multitype.listview.BaseAdapter<String>(balls) {
+                                    override fun getLayoutId(position: Int): Int = R.layout.item_lottery_ball
+
+                                    override fun convert(
+                                        viewHolder: com.weyee.sdk.multitype.listview.BaseHolder,
+                                        item: String?,
+                                        position: Int
+                                    ) {
                                         val color: String = when (data.category.lottery_id) {
                                             "ssq" -> if (position == balls.size - 1) "#158ad2" else "#e34c4c"
                                             "dlt" -> if (position == balls.size - 1 || position == balls.size - 2) "#158ad2" else "#e34c4c"
                                             "qlc" -> if (position == balls.size - 1) "#158ad2" else "#e34c4c"
                                             else -> "#e34c4c"
                                         }
-                                        (view as TextView).setTextColor(Color.parseColor(color))
-                                        return view
+                                        (viewHolder.itemView as BallTextView).textColor = Color.parseColor(color)
+                                        (viewHolder.itemView as BallTextView).strokeColor = Color.parseColor(color)
+                                        (viewHolder.itemView as BallTextView).text = item
                                     }
                                 }
                         }

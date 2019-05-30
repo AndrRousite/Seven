@@ -78,8 +78,12 @@
     </declare-styleable>
 
     <declare-styleable name="BallTextView">
-        <attr name="border" format="dimension"/>
-        <attr name="android:color"/>
+        <attr name="strokeSize" format="dimension"/>
+        <attr name="strokeColor"/>
+        <attr name="android:textSize" format="dimension"/>
+        <attr name="android:textColor"/>
+        <attr name="android:text" format="string"/>
+        <attr name="android:background"/>
     </declare-styleable>
 
 </resources>
