@@ -6,5 +6,7 @@ package com.wuqi.a_service.wan
  */
 data class BallBean(
     var data: String,
-    var selected: Boolean
+    var selected: Boolean,
+    var textColor: String? = null,
+    var backgroundColor: String? = null
 )

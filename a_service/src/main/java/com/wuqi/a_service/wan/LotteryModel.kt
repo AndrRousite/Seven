@@ -31,7 +31,7 @@ class LotteryModel @Inject constructor(repositoryManager: IRepositoryManager?) :
         ).map { it.result }
     }
 
-    override fun infos(lottery_id: String, lottery_no: String?): Observable<LotteryInfo> {
+    override fun infos(lottery_id: String?, lottery_no: String?): Observable<LotteryInfo> {
         return mRepositoryManager.obtainCacheService(LotteryCache::class.java).infos(
             mRepositoryManager.obtainRetrofitService(LotteryService::class.java).infos(lottery_id, lottery_no).map {
                 InfoCache(it.error_code, it.reason, it.result)

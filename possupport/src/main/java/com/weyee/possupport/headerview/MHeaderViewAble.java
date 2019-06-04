@@ -30,23 +30,37 @@ import androidx.annotation.DrawableRes;
 public interface MHeaderViewAble {
 
     void setOnClickLeftMenuBackListener(View.OnClickListener onClickListener);
+
     void setOnClickRightMenuOneListener(View.OnClickListener onClickListener);
+
     void setOnClickRightMenuTwoListener(View.OnClickListener onClickListener);
+
     void setOnClickRightMenuThreeListener(View.OnClickListener onClickListener);
+
     void setOnClickLeftMenuCloseListener(View.OnClickListener onClickListener);
 
     void isShowMenuLeftBackView(boolean isShow);
+
     void isShowMenuLeftCloseView(boolean isShow);
+
     void isShowMenuRightOneView(boolean isShow);
+
     void isShowMenuRightTwoView(boolean isShow);
+
     void isShowMenuRightThreeView(boolean isShow);
+
     void isShowLine(boolean isShow);
 
     TextView getMenuLeftBackView();
+
     TextView getMenuLeftCloseView();
+
     TextView getMenuRightOneView();
+
     TextView getMenuRightTwoView();
+
     TextView getMenuRightThreeView();
+
     TextView getTitleView();
 
     void setBottomLineColor(@ColorInt int colorId);
@@ -54,24 +68,40 @@ public interface MHeaderViewAble {
     void setTitleTextColor(int colorId);
 
     void setMenuLeftBackView(@DrawableRes int id, String title);
+
     void setMenuLeftBackIcon(@DrawableRes int id);
+
     void setMenuLeftCloseIcon(@DrawableRes int id);
+
     void setMenuLeftTextColor(int colorId);
 
     void setMenuRightOneIcon(@DrawableRes int id);
+
     void setMenuRightOneTextColor(int colorId);
+
     void setMenuRightTwoIcon(@DrawableRes int id);
+
     void setMenuRightTwoTextColor(int colorId);
+
     void setMenuRightThreeIcon(@DrawableRes int id);
+
     void setMenuRightThreeTextColor(int colorId);
+
     void setMenuRightViewOne(@DrawableRes int id, String title);
+
     void setMenuRightViewTwo(@DrawableRes int id, String title);
+
     void setMenuRightViewThree(@DrawableRes int id, String title);
 
     void setTitle(String title);
 
+    void setBackgroundColor(@ColorInt int color);
+
+    void setBackgroundDrawable(@DrawableRes int background);
+
     /**
      * 是否显示新消息的点
+     *
      * @param isShow
      */
     void isShowNewsHint(boolean isShow);

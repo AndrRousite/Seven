@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/toolbarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:statusBarScrim="@android:color/transparent">
+
+            <FrameLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+                <com.weyee.poswidget.layout.QMUIRelativeLayout android:layout_width="match_parent"
+                                                               android:layout_marginTop="10dp"
+                                                               android:layout_marginLeft="10dp"
+                                                               android:layout_marginRight="10dp"
+                                                               android:layout_marginBottom="20dp"
+                                                               android:paddingLeft="@dimen/default_activity_16dp"
+                                                               android:paddingRight="@dimen/default_activity_16dp"
+                                                               android:paddingTop="@dimen/default_activity_16dp"
+                                                               android:paddingBottom="10dp"
+                                                               tools:layout_height="200dp"
+                                                               app:qmui_shadowElevation="5dp"
+                                                               app:qmui_radius="2dp"
+                                                               android:background="@color/cl_ebb5c1"
+                                                               android:layout_height="wrap_content">
+
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                              tools:text="2019-05-28星期二"
+                              android:id="@+id/tvHead"
+                              android:textColor="@color/cl_4d4d4d"/>
+
+                    <com.weyee.poswidget.layout.alpha.QMUIAlphaTextView android:layout_width="wrap_content"
+                                                                        android:layout_height="wrap_content"
+                                                                        android:textColor="#e34c4c"
+                                                                        android:text="投注"
+                                                                        android:id="@+id/tvBetting"
+                                                                        android:paddingLeft="5dp"
+                                                                        android:paddingRight="5dp"
+                                                                        android:paddingBottom="5dp"
+                                                                        android:layout_alignParentRight="true"
+                    />
+
+                    <GridView android:layout_width="match_parent" android:layout_height="wrap_content"
+                              android:numColumns="8"
+                              android:layout_marginTop="@dimen/default_activity_16dp"
+                              android:horizontalSpacing="5dp"
+                              android:layout_below="@id/tvHead"
+                              android:id="@+id/gridView">
+
+                    </GridView>
+
+                </com.weyee.poswidget.layout.QMUIRelativeLayout>
+            </FrameLayout>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.core.widget.NestedScrollView android:layout_width="match_parent"
+                                               android:layout_height="wrap_content">
+            <com.google.android.material.tabs.TabLayout android:layout_width="match_parent"
+                                                        android:id="@+id/tabLayout"
+                                                        app:layout_collapseMode="pin"
+                                                        app:tabMode="fixed"
+                                                        app:tabGravity="center"
+                                                        app:tabSelectedTextColor="#e34c4c"
+                                                        app:tabTextColor="@color/cl_333333"
+                                                        app:tabIndicatorFullWidth="false"
+                                                        app:tabIndicatorColor="#e34c4c"
+                                                        android:layout_height="?android:actionBarSize">
+
+            </com.google.android.material.tabs.TabLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/refreshView"
+                android:layout_marginTop="?android:actionBarSize"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </FrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

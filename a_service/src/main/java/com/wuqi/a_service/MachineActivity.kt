@@ -11,7 +11,6 @@ import com.weyee.poswidget.textview.ball.BallTextView
 import com.weyee.sdk.multitype.listview.BaseHolder
 import com.weyee.sdk.router.Path
 import com.weyee.sdk.toast.ToastUtils
-import com.weyee.sdk.util.number.MNumberUtil
 import com.wuqi.a_service.di.DaggerMachineComponent
 import com.wuqi.a_service.di.LotteryModule
 import com.wuqi.a_service.wan.BallBean
@@ -24,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_machine.*
  */
 @Route(path = Path.Service + "Machine")
 class MachineActivity : BaseActivity<LotteryPresenter>(), LotteryContract.MachineView {
-    private var lastPeriod: Int? = null
+    private var lotteryNo: String? = null
     private var lotteryId: String? = null
     private var redAdapter: com.weyee.sdk.multitype.listview.BaseAdapter<BallBean>? = null
     private var blueAdapter: com.weyee.sdk.multitype.listview.BaseAdapter<BallBean>? = null
@@ -41,7 +40,7 @@ class MachineActivity : BaseActivity<LotteryPresenter>(), LotteryContract.Machin
     override fun getResourceId(): Int = R.layout.activity_machine
 
     override fun initView(savedInstanceState: Bundle?) {
-        lastPeriod = intent.getIntExtra("last_period", -1)
+        lotteryNo = intent.getStringExtra("lottery_no")
         lotteryId = intent.getStringExtra("lottery_id")
 
         redGridView.setOnItemClickListener { _, _, position, _ ->
@@ -105,12 +104,12 @@ class MachineActivity : BaseActivity<LotteryPresenter>(), LotteryContract.Machin
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        if ((lastPeriod ?: -1)!! > 0) {
+        if (lotteryNo != null) {
             fl_filter.visibility = View.VISIBLE
             btnQuery.text = "查询"
-            spinnerView.setItems(mPresenter.periods(lastPeriod!!))
+            spinnerView.setItems(mPresenter.periods(lotteryNo!!))
             spinnerView.setOnItemSelectedListener { _, _, _, item ->
-                lastPeriod = MNumberUtil.convertToint(item as String?)
+                lotteryNo = item as String?
             }
             // 模拟点击
             btnQuery.performClick()

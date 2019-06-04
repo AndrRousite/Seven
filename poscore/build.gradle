@@ -46,6 +46,8 @@ dependencies {
     api libsConfig.androidUtilCode
     // retrofit
     api libsConfig.retrofit
+    // gson
+    api libsConfig.gson
     // rxcache
     api libsConfig.rxCache
     // RxJava2

@@ -16,7 +16,6 @@ import com.weyee.sdk.multitype.BaseHolder
 import com.weyee.sdk.multitype.HorizontalDividerItemDecoration
 import com.weyee.sdk.router.Path
 import com.weyee.sdk.router.WorkerNavigation
-import com.weyee.sdk.util.number.MNumberUtil
 import com.wuqi.a_service.di.DaggerLotteryComponent
 import com.wuqi.a_service.di.LotteryModule
 import com.wuqi.a_service.wan.LotteryContract
@@ -54,9 +53,9 @@ class LotteryActivity : BaseActivity<LotteryPresenter>(), LotteryContract.Lotter
         )
         recyclerView.adapter =
             object : BaseAdapter<LotteryWapperCategoryAndInfo>(null, { _, _, data, _ ->
-                WorkerNavigation(context).toMachineActivity(
-                    MNumberUtil.convertToint(null),
-                    data.category.lottery_id
+                WorkerNavigation(context).toLotteryDetailActivity(
+                    data.category.lottery_id,
+                    data.info.lottery_no
                 )
             }) {
                 override fun getHolder(v: View, viewType: Int): BaseHolder<LotteryWapperCategoryAndInfo> {

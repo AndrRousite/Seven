@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:paddingLeft="@dimen/default_activity_16dp"
+              android:paddingRight="@dimen/default_activity_16dp"
+              android:paddingTop="10dp"
+              android:paddingBottom="10dp"
+              android:gravity="center_vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <com.weyee.poswidget.textview.AutoMoveTextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:id="@+id/tvName"
+              android:textColor="@color/cl_666666"
+              android:singleLine="true"
+              tools:text="Name"/>
+
+    <com.weyee.poswidget.textview.AutoMoveTextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:id="@+id/tvRequire"
+              android:gravity="center_horizontal"
+              android:textColor="@color/cl_666666"
+              android:singleLine="true"
+              tools:text="Require"/>
+
+
+    <com.weyee.poswidget.textview.AutoMoveTextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:id="@+id/tvNum"
+              android:gravity="center_horizontal"
+              android:textColor="@color/cl_666666"
+              android:singleLine="true"
+              tools:text="Num"/>
+
+    <com.weyee.poswidget.textview.AutoMoveTextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1"
+              android:id="@+id/tvAmount"
+              android:gravity="center_horizontal"
+              android:textColor="@color/cl_666666"
+              android:singleLine="true"
+              tools:text="Amount"/>
+
+</LinearLayout>

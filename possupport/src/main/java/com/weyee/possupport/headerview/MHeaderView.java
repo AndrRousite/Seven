@@ -385,6 +385,11 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
         super.setBackgroundColor(color);
     }
 
+    @Override
+    public void setBackgroundDrawable(int background) {
+        super.setBackgroundDrawable(getDrawable(getContext(), background));
+    }
+
     private static Drawable getDrawable(Context context, int resId) {
         Drawable drawable = context.getResources().getDrawable(resId);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());

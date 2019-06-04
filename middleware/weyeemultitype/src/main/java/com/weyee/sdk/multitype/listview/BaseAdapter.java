@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.weyee.sdk.multitype.AdapterHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter implemen
     private List<T> mList;
 
     public BaseAdapter(@Nullable List<T> datas) {
-        this.mList = datas;
+        this.mList = datas == null ? new ArrayList<>() : datas;
     }
 
     @Override

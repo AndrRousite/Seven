@@ -7,6 +7,8 @@ import com.weyee.possupport.arch.RxLiftUtils
 import com.weyee.sdk.api.observer.ProgressSubscriber
 import com.weyee.sdk.api.observer.transformer.Transformer
 import com.weyee.sdk.toast.ToastUtils
+import com.weyee.sdk.util.number.MNumberUtil
+import com.weyee.sdk.util.number.MPriceUtil
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.functions.Function
@@ -63,12 +65,70 @@ class LotteryPresenter @Inject constructor(model: LotteryModel?, rootView: Lotte
             })
     }
 
-    fun infos(lottery_id: String, lottery_no: String) {
+    fun infos(lottery_id: String?, lottery_no: String?) {
         mModel.infos(lottery_id, lottery_no)
             .compose(Transformer.switchSchedulers(progressAble))
             .`as`(RxLiftUtils.bindLifecycle(lifecycleOwner))
             .subscribe(object : ProgressSubscriber<LotteryInfo>() {
                 override fun onSuccess(t: LotteryInfo?) {
+                    if (mView is LotteryContract.DetailView) {
+                        val list = mutableListOf<BallBean>()
+                        val balls = t?.lottery_res?.split(",")
+                        when (lottery_id) {
+                            "ssq" -> balls?.forEachIndexed { index, s ->
+                                list.add(
+                                    BallBean(
+                                        s,
+                                        false,
+                                        "#FFFFFF",
+                                        if (index < balls.size - 1) "#e34c4c" else "#158ad2"
+                                    )
+                                )
+                            }
+                            "dlt"
+                            -> balls?.forEachIndexed { index, s ->
+                                list.add(
+                                    BallBean(
+                                        s,
+                                        false,
+                                        "#FFFFFF",
+                                        if (index < balls.size - 2) "#e34c4c" else "#158ad2"
+                                    )
+                                )
+                            }
+                            "qlc" -> balls?.forEachIndexed { index, s ->
+                                list.add(
+                                    BallBean(
+                                        s,
+                                        false,
+                                        "#FFFFFF",
+                                        if (index < balls.size - 1) "#e34c4c" else "#158ad2"
+                                    )
+                                )
+                            }
+                            else -> balls?.forEachIndexed { index, s ->
+                                list.add(
+                                    BallBean(
+                                        s,
+                                        false,
+                                        "#FFFFFF",
+                                        "#e34c4c"
+                                    )
+                                )
+                            }
+                        }
+                        (mView as LotteryContract.DetailView).setHeadData(t?.lottery_no, t?.lottery_date, list)
+                        val tempList = mutableListOf<Any>()
+                        tempList.add(PrizeBean(t?.lottery_sale_amount, null, t?.lottery_pool_amount))
+                        tempList.add(LotteryPrize("单注奖金(元)", "奖项", "中奖注数", "中奖条件"))
+                        tempList.addAll(t?.lottery_prize ?: emptyList())
+                        (mView as LotteryContract.DetailView).setInfoData(tempList)
+                    }
+                }
+
+                override fun onCompleted() {
+                    super.onCompleted()
+                    mView.onCompleted()
                 }
 
             })
@@ -99,10 +159,10 @@ class LotteryPresenter @Inject constructor(model: LotteryModel?, rootView: Lotte
     /**
      * 获取期数信息
      */
-    fun periods(lastPeriod: Int): List<String> {
+    fun periods(lastPeriod: String): List<String> {
         val list = mutableListOf<String>()
         for (i in 0 until 30) {
-            val data = lastPeriod - i
+            val data = MNumberUtil.convertToint(lastPeriod) - i
             list.add("$data")
         }
         return list
@@ -196,5 +256,31 @@ class LotteryPresenter @Inject constructor(model: LotteryModel?, rootView: Lotte
                 RandomUtil.randomEles(blues, 2).forEach { it.selected = true }
             }
         }
+    }
+
+    /**
+     * 计算金钱，保留单位，并保留小数点后两位
+     */
+    fun calculatedAmount(data: String?): Array<String> {
+        val yi = 10000000f  // 1千万
+        val qian = 1000f  // 1千
+
+        var amount = MNumberUtil.convertToDouble(MPriceUtil.filterPriceUnit(data ?: "0"))
+
+        val unit: String
+
+        when {
+            amount > yi -> {
+                unit = "亿"
+                amount /= yi * 10
+            }
+            amount > qian -> {
+                unit = "万"
+                amount /= qian * 10
+            }
+            else -> unit = "元"
+        }
+
+        return arrayOf(String.format("%.2f", amount), unit)
     }
 }

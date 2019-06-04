@@ -73,6 +73,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 //        }.start()
 
         headerView.isShowMenuLeftBackView(false)
+        headerView.setBackgroundDrawable(R.drawable.action_bar_img)
 
         RxJavaUtils.polling(2).`as`(RxLiftUtils.bindLifecycle(this@MainActivity)).subscribe {
             ShortcutBadger.applyCount(applicationContext, (Math.random() * 1000).toInt())

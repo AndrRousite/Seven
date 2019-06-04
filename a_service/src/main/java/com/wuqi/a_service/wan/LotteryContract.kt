@@ -13,16 +13,20 @@ interface LotteryContract {
         fun onCompleted()
     }
 
-    interface LotteryView : View{
+    interface LotteryView : View {
         fun setHomeData(list: List<LotteryWapperCategoryAndInfo>?)
     }
 
     interface MachineView : View
+    interface DetailView : View {
+        fun setHeadData(lottery_no:String?,lottery_date:String?,data: List<BallBean>?)
+        fun setInfoData(data: List<Any>?)
+    }
 
     interface Model : IModel {
         fun lotterys(): Observable<List<LotteryCategory>>
 
-        fun infos(lottery_id: String, lottery_no: String?): Observable<LotteryInfo>
+        fun infos(lottery_id: String?, lottery_no: String?): Observable<LotteryInfo>
 
         fun historys(lottery_id: String, page: Int, page_size: Int): Observable<LotteryHistory>
 

@@ -28,7 +28,7 @@ interface LotteryService {
      * @param lottery_no 期数
      */
     @GET("lottery/query?key=$ApiKey")
-    fun infos(@Query(value = "lottery_id") lottery_id: String, @Query(value = "lottery_no") lottery_no: String?): Observable<LotteryResponse<LotteryInfo>>
+    fun infos(@Query(value = "lottery_id") lottery_id: String?, @Query(value = "lottery_no") lottery_no: String?): Observable<LotteryResponse<LotteryInfo>>
 
     /**
      * 历史开奖结果列表
