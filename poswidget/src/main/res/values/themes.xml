@@ -28,6 +28,16 @@
         <item name="ms_dropdown_offset">1dp</item>
         <item name="android:actionBarSize">45dp</item>
         <item name="actionBarSize">45dp</item>
+
+
+        <!--QMUI-->
+
+        <item name="qmui_alpha_pressed">0.5</item>
+        <item name="qmui_alpha_disabled">0.5</item>
+
+        <item name="qmui_general_shadow_elevation">14dp</item>
+        <item name="qmui_general_shadow_alpha">0.25</item>
+
     </style>
 
 </resources>
