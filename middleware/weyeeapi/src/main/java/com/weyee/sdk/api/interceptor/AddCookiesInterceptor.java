@@ -1,5 +1,6 @@
 package com.weyee.sdk.api.interceptor;
 
+import androidx.annotation.NonNull;
 import com.weyee.sdk.api.config.Config;
 import com.weyee.sdk.log.LogUtils;
 import com.weyee.sdk.util.sp.SpUtils;
@@ -20,7 +21,7 @@ import java.util.HashSet;
  */
 public class AddCookiesInterceptor implements Interceptor {
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request.Builder builder = chain.request().newBuilder();
         HashSet<String> preferences = (HashSet<String>) SpUtils.getDefault().getStringSet(Config.COOKIE, new HashSet<>());
         if (preferences != null) {

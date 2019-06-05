@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import com.blankj.utilcode.util.BarUtils;
 import com.blankj.utilcode.util.ReflectUtils;
 import com.google.android.material.appbar.AppBarLayout;
@@ -64,12 +64,22 @@ public class MActivity extends InnerBaseActivity {
 
         if (hasToolbar()) {
             abl.setVisibility(View.VISIBLE);
+            initAppBarLayout();
             initHeaderView();
-            BarUtils.setStatusBarColor(this, ContextCompat.getColor(this, R.color.colorPrimary), 112);
-            BarUtils.addMarginTopEqualStatusBarHeight(rootContainer);
+            BarUtils.setStatusBarAlpha(this, 112, true);
+            //BarUtils.setStatusBarColor(this, ContextCompat.getColor(this, android.R.color.transparent), 112);
+            BarUtils.addMarginTopEqualStatusBarHeight((View) mHeaderViewAble);
         } else {
             abl.removeView((View) mHeaderViewAble);
         }
+    }
+
+    protected void initAppBarLayout() {
+        ViewGroup.LayoutParams params = abl.getLayoutParams();
+        TypedValue typedValue = new TypedValue();
+        getTheme().resolveAttribute(R.attr.actionBarSize, typedValue, true);
+        params.height = BarUtils.getStatusBarHeight() + TypedValue.complexToDimensionPixelSize(typedValue.data, getResources().getDisplayMetrics());
+        abl.setLayoutParams(params);
     }
 
     /**
@@ -96,6 +106,11 @@ public class MActivity extends InnerBaseActivity {
     @NonNull
     protected MHeaderViewAble getHeaderView() {
         return mHeaderViewAble;
+    }
+
+    @NonNull
+    protected AppBarLayout getAppBarLayout() {
+        return abl;
     }
 
     /**

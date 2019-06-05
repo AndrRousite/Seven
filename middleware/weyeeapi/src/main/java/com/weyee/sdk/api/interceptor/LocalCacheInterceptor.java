@@ -1,6 +1,7 @@
 package com.weyee.sdk.api.interceptor;
 
 import android.annotation.SuppressLint;
+import androidx.annotation.NonNull;
 import com.weyee.sdk.util.Tools;
 import okhttp3.CacheControl;
 import okhttp3.Interceptor;
@@ -19,7 +20,7 @@ import java.io.IOException;
 @SuppressLint("MissingPermission")
 public class LocalCacheInterceptor implements Interceptor {
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
 
         Request request = chain.request();
         boolean connected = Tools.isConnected();

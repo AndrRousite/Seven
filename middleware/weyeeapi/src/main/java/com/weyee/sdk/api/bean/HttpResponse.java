@@ -11,11 +11,8 @@ package com.weyee.sdk.api.bean;
 public class HttpResponse<T> {
 
     private int status;
-    /**
-     * errorno : 0
-     * errormsg : success
-     */
-    private ErrorEntity error;
+
+    private String error;
 
     private T data;
 
@@ -27,11 +24,11 @@ public class HttpResponse<T> {
         this.status = status;
     }
 
-    public ErrorEntity getError() {
+    public String getError() {
         return error;
     }
 
-    public void setError(ErrorEntity error) {
+    public void setError(String error) {
         this.error = error;
     }
 
@@ -43,24 +40,4 @@ public class HttpResponse<T> {
         this.data = data;
     }
 
-    public static class ErrorEntity {
-        private int errorno;
-        private String errormsg;
-
-        public int getErrorno() {
-            return errorno;
-        }
-
-        public void setErrorno(int errorno) {
-            this.errorno = errorno;
-        }
-
-        public String getErrormsg() {
-            return errormsg;
-        }
-
-        public void setErrormsg(String errormsg) {
-            this.errormsg = errormsg;
-        }
-    }
 }

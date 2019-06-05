@@ -18,6 +18,10 @@ import com.blankj.utilcode.util.SizeUtils
 import com.weyee.possupport.arch.RxLiftUtils
 import com.weyee.poswidget.stateview.view.LoadingView
 import com.weyee.sdk.api.rxutil.RxJavaUtils
+import com.weyee.sdk.dialog.MessageDialog
+import com.weyee.sdk.permission.PermissionIntents
+import com.yanzhenjie.permission.AndPermission
+import com.yanzhenjie.permission.Permission
 import java.util.concurrent.TimeUnit
 
 
@@ -63,21 +67,35 @@ class SplashActivity : AppCompatActivity() {
             }
     }
 
-    private fun toMain(){
-        val animatorX = ObjectAnimator.ofFloat(window.decorView,"scaleX", 1f, 1.15f)
-        val animatorY = ObjectAnimator.ofFloat(window.decorView,"scaleY", 1f, 1.15f)
+    private fun toMain() {
+        AndPermission.with(this)
+            .runtime()
+            .permission(Permission.READ_PHONE_STATE, Permission.WRITE_EXTERNAL_STORAGE)
+            .onGranted {
+                val animatorX = ObjectAnimator.ofFloat(window.decorView, "scaleX", 1f, 1.15f)
+                val animatorY = ObjectAnimator.ofFloat(window.decorView, "scaleY", 1f, 1.15f)
 
-        val animatorSet = AnimatorSet()
-        animatorSet.setDuration(1000).play(animatorX).with(animatorY)
-        animatorSet.start()
-        animatorSet.addListener(object: AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                // Preview Window设置的背景图如果不做处理，图片就会一直存在于内存中
-                window.setBackgroundDrawable(null)
-                finish()
+                val animatorSet = AnimatorSet()
+                animatorSet.setDuration(1000).play(animatorX).with(animatorY)
+                animatorSet.start()
+                animatorSet.addListener(object : AnimatorListenerAdapter() {
+                    override fun onAnimationEnd(animation: Animator?) {
+                        startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+                        // Preview Window设置的背景图如果不做处理，图片就会一直存在于内存中
+                        window.setBackgroundDrawable(null)
+                        finish()
+                    }
+                })
+            }.onDenied {
+                val dialog = MessageDialog(this@SplashActivity)
+                dialog.setMsg("为保证您正常使用，请授予「APP」使用存储空间、获取设备识别权限")
+                dialog.setCancelText("退出")
+                dialog.setConfirmText("去设置")
+                dialog.setOnClickCancelListener { finish() }
+                dialog.setOnClickConfirmListener { PermissionIntents.toPermissionSetting(this@SplashActivity) }
+                dialog.show()
             }
-        })
+            .start()
 
     }
 }

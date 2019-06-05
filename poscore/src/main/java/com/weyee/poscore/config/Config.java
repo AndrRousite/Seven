@@ -49,7 +49,17 @@ public class Config {
                 //不设置的话，默认不对cookie做处理
                 //.setCookieType(new SPCookieStore(this))
                 //可以添加自己的拦截器(比如使用自己熟悉三方的缓存库等等)
-                //.setAddInterceptor(null)
+//                .addInterceptor(new WeYeeEncryptInterceptor() {
+//                    @Override
+//                    protected void prepareParams(Map<String, Object> map) {
+//                        // 可以继续添加参数
+//                    }
+//
+//                    @Override
+//                    protected String getAppKey() {
+//                        return null;
+//                    }
+//                })
                 //全局ssl证书认证
                 //1、信任所有证书,不安全有风险（默认信任所有证书）
                 //.setSslSocketFactory()

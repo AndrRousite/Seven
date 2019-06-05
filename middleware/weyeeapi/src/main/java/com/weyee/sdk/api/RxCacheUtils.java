@@ -32,7 +32,7 @@ public class RxCacheUtils {
     private RxCacheUtils() {
         RxCache.Builder builder = new RxCache.Builder();
         builder.useExpiredDataIfLoaderNotAvailable(true);
-        File file = new File(Tools.getApp().getCacheDir(), "RxCache");
+        File file = new File(Tools.getApp().getExternalCacheDir(), "rxcache");
         if (Tools.createOrExistsDir(file)) {
             this.rxCache = builder.persistence(file, new GsonSpeaker());
         }

@@ -121,7 +121,7 @@ public class HttpClient {
             return this;
         }
 
-        public Builder setAddInterceptor(Interceptor... interceptors) {
+        public Builder addInterceptor(Interceptor... interceptors) {
             this.interceptors = interceptors;
             return this;
         }

@@ -21,6 +21,7 @@ package com.weyee.sdk.util;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import com.blankj.utilcode.util.*;
+import com.weyee.sdk.util.device.DeviceHelper;
 
 import java.io.File;
 
@@ -46,11 +47,33 @@ public class Tools {
         return ScreenUtils.getScreenHeight();
     }
 
-    public static int dp2px(float dpValue) {
-        return SizeUtils.dp2px(dpValue);
-    }
-
     public static boolean createOrExistsDir(File file) {
         return FileUtils.createOrExistsDir(file);
+    }
+
+    public static String encodeSha1(final String data, final String key) {
+        return EncryptUtils.encryptHmacSHA1ToString(data, key);
+    }
+
+    public static String getVersionName() {
+        return AppUtils.getAppVersionName();
+    }
+
+    @SuppressLint("MissingPermission")
+    public static String getIMEI() {
+        return PhoneUtils.getIMEI();
+    }
+
+    @SuppressLint("MissingPermission")
+    public static String getSerial() {
+        return PhoneUtils.getSerial();
+    }
+
+    public static String getAndroidId() {
+        return DeviceUtils.getModel();
+    }
+
+    public static String getDeviceInfo() {
+        return DeviceHelper.getDeviceInfo();
     }
 }

@@ -3,6 +3,7 @@ package com.weyee.sdk.api.observer;
 import androidx.annotation.NonNull;
 import com.weyee.sdk.api.dispose.DisposeManager;
 import com.weyee.sdk.api.exception.ApiException;
+import com.weyee.sdk.api.exception.HttpException;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -48,8 +49,24 @@ abstract class BaseObserver<T> implements Observer<T>, ISubscriber<T> {
     @Override
     public void onError(@NonNull Throwable e) {
         e.printStackTrace();
-        doOnError(ApiException.handleException(e).getMessage());
+
+        HttpException httpException = HttpException.handleException(e);
+        doOnError(httpException.getCode(), httpException.getMessage());
+
+        /**
+         * onError和onComplete是互斥的
+         */
         onComplete();
+    }
+
+    /**
+     * 处理后台接口返回的错误信息，属于正常流程
+     *
+     * @param e
+     */
+    void onError(@NonNull ApiException e) {
+        e.printStackTrace();
+        doOnError(e.getCode(), e.getMessage());
     }
 
 

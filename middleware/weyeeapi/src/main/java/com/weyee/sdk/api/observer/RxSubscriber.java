@@ -18,7 +18,7 @@ abstract class RxSubscriber<T> extends BaseObserver<T> {
      *
      * @param errorMsg
      */
-    protected void onError(String errorMsg){
+    protected void onError(int code, String errorMsg) {
 
     }
 
@@ -32,7 +32,7 @@ abstract class RxSubscriber<T> extends BaseObserver<T> {
     /**
      * 完成后的回调
      */
-    protected void onCompleted(){
+    protected void onCompleted() {
 
     }
 
@@ -41,11 +41,11 @@ abstract class RxSubscriber<T> extends BaseObserver<T> {
     }
 
     @Override
-    public void doOnError(String errorMsg) {
+    public void doOnError(int code, String errorMsg) {
         if (showToast() && !TextUtils.isEmpty(errorMsg)) {
             ToastUtils.show(errorMsg);
         }
-        onError(errorMsg);
+        onError(code, errorMsg);
     }
 
     @Override

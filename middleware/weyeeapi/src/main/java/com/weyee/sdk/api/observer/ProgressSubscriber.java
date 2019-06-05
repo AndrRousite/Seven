@@ -1,6 +1,8 @@
 package com.weyee.sdk.api.observer;
 
 import android.content.Context;
+import com.weyee.sdk.api.bean.HttpResponse;
+import com.weyee.sdk.api.exception.ApiException;
 import com.weyee.sdk.api.observer.listener.ProgressAble;
 import io.reactivex.disposables.Disposable;
 
@@ -41,6 +43,19 @@ public abstract class ProgressSubscriber<T> extends RxSubscriber<T> {
         super.doOnCompleted();
         if (progressAble != null) {
             progressAble.hideProgress();
+        }
+    }
+
+    @Override
+    public void doOnNext(T tHttpResponse) {
+        if (tHttpResponse instanceof HttpResponse) {
+            if (((HttpResponse) tHttpResponse).getStatus() == 1) {
+                onSuccess(tHttpResponse);
+            } else {
+                onError(ApiException.handleException(((HttpResponse) tHttpResponse).getStatus(), ((HttpResponse) tHttpResponse).getError()));
+            }
+        } else {
+            super.doOnNext(tHttpResponse);
         }
     }
 }

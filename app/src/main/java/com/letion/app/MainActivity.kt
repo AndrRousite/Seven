@@ -12,6 +12,7 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ServiceUtils
 import com.letion.a_ble.BleActivity
 import com.letion.app.di.component.DaggerMainComponent
@@ -72,8 +73,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 //            }
 //        }.start()
 
+        BarUtils.setStatusBarAlpha(this, 0, true)
+        BarUtils.setStatusBarLightMode(this,true)
         headerView.isShowMenuLeftBackView(false)
-        headerView.setBackgroundDrawable(R.drawable.action_bar_img)
+        appBarLayout.setBackgroundDrawable(resources.getDrawable(R.drawable.action_bar_img))
 
         RxJavaUtils.polling(2).`as`(RxLiftUtils.bindLifecycle(this@MainActivity)).subscribe {
             ShortcutBadger.applyCount(applicationContext, (Math.random() * 1000).toInt())

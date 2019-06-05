@@ -26,8 +26,8 @@
         <item name="ms_padding_left_size">8dp</item>
         <item name="ms_padding_top_size">6.5dp</item>
         <item name="ms_dropdown_offset">1dp</item>
-        <item name="android:actionBarSize">45dp</item>
-        <item name="actionBarSize">45dp</item>
+        <item name="android:actionBarSize">50dp</item>
+        <item name="actionBarSize">50dp</item>
 
 
         <!--QMUI-->

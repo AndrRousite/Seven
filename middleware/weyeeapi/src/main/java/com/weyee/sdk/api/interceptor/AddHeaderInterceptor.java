@@ -1,5 +1,6 @@
 package com.weyee.sdk.api.interceptor;
 
+import androidx.annotation.NonNull;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -17,7 +18,7 @@ import java.io.IOException;
 public class AddHeaderInterceptor implements Interceptor {
 
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public Response intercept(@NonNull Chain chain) throws IOException {
         Request.Builder request = chain.request().newBuilder();
         request.addHeader("Accept", "application/json;");
         request.addHeader("Connection", "keep-alive");

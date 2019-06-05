@@ -23,7 +23,7 @@ interface ISubscriber<T> {
      *
      * @param errorMsg 错误信息
      */
-    void doOnError(String errorMsg);
+    void doOnError(int errorCode, String errorMsg);
 
     /**
      * 成功回调

@@ -78,15 +78,17 @@ public class GlobalRxHttp {
         String tag = null;
         try {
             tag = (String) (cls != null ? cls.getField("baseUrl").get(null) : null);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
+        } catch (IllegalAccessException ignore) {
+        } catch (NoSuchFieldException ignore) {
         }
         if (retrofitClientMap.containsKey(tag)) {
             return retrofitClientMap.get(tag);
         } else {
-            retrofitClientMap.put(tag == null || tag.equals(defaultBaseUrl) ? null : tag, new SimpleRetrofitClient().baseUrl(tag == null ? defaultBaseUrl : tag).client(defaultOkhttpClient).build());
+            if (tag == null || tag.equals(defaultBaseUrl)) {
+                retrofitClientMap.put(null, new SimpleRetrofitClient().baseUrl(defaultBaseUrl).client(defaultOkhttpClient).build());
+            } else {
+                retrofitClientMap.put(tag, new SimpleRetrofitClient().baseUrl(tag).client(defaultOkhttpClient).build());
+            }
             return retrofitClientMap.get(tag == null || tag.equals(defaultBaseUrl) ? null : tag);
         }
     }

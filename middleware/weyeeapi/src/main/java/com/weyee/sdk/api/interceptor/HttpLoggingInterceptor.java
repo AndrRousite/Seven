@@ -1,5 +1,6 @@
 package com.weyee.sdk.api.interceptor;
 
+import androidx.annotation.NonNull;
 import com.weyee.sdk.log.LogUtils;
 
 /**
@@ -13,7 +14,7 @@ public class HttpLoggingInterceptor implements okhttp3.logging.HttpLoggingInterc
     private StringBuffer mMessage = new StringBuffer();
 
     @Override
-    public void log(String message) {
+    public void log(@NonNull String message) {
         // 请求或者响应开始
         if (message.startsWith("--> POST")) {
             mMessage.setLength(0);
