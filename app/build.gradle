@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'tinyPIC'
+//apply plugin: 'tinyPIC'
 
 
 def androidConfig = rootProject.ext.android
@@ -114,12 +114,4 @@ dependencies {
 
 repositories {
     maven { url 'https://github.com/500px/500px-android-blur/raw/master/releases/' }
-}
-
-tinyinfo {
-    apiKey = '4YrlKpNr3PrLNqyXCbS6nyxLkCd9Ywpk'
-    //是否跳过此task
-    //skip = true/false
-    //是否打印日志
-    //isShowLog = true/false
 }

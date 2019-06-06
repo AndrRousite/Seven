@@ -4,6 +4,7 @@ import android.app.Application;
 import com.weyee.possupport.AutoSizeConfig;
 import com.weyee.sdk.api.RxHttpUtils;
 import com.weyee.sdk.api.base.HttpClient;
+import com.weyee.sdk.api.interceptor.WeYeeEncryptInterceptor;
 import com.weyee.sdk.api.rxutil.RxJavaUtils;
 import com.weyee.sdk.api.rxutil.task.RxUITask;
 import com.weyee.sdk.log.Environment;
@@ -13,6 +14,8 @@ import com.weyee.sdk.player.PlayerUtils;
 import com.weyee.sdk.router.RouterManager;
 import com.weyee.sdk.toast.ToastUtils;
 import com.weyee.sdk.util.sp.SpUtils;
+
+import java.util.Map;
 
 /**
  * <p>全局配置，默认配置
@@ -49,17 +52,17 @@ public class Config {
                 //不设置的话，默认不对cookie做处理
                 //.setCookieType(new SPCookieStore(this))
                 //可以添加自己的拦截器(比如使用自己熟悉三方的缓存库等等)
-//                .addInterceptor(new WeYeeEncryptInterceptor() {
-//                    @Override
-//                    protected void prepareParams(Map<String, Object> map) {
-//                        // 可以继续添加参数
-//                    }
-//
-//                    @Override
-//                    protected String getAppKey() {
-//                        return null;
-//                    }
-//                })
+                .addInterceptor(new WeYeeEncryptInterceptor() {
+                    @Override
+                    protected void prepareParams(Map<String, Object> map) {
+                        // 可以继续添加参数
+                    }
+
+                    @Override
+                    protected String getAppKey() {
+                        return null;
+                    }
+                })
                 //全局ssl证书认证
                 //1、信任所有证书,不安全有风险（默认信任所有证书）
                 //.setSslSocketFactory()

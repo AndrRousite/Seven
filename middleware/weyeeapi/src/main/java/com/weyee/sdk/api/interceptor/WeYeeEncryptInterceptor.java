@@ -3,8 +3,6 @@ package com.weyee.sdk.api.interceptor;
 import android.os.Build;
 import androidx.annotation.NonNull;
 import cn.hutool.core.util.RandomUtil;
-import com.weyee.sdk.log.Environment;
-import com.weyee.sdk.log.LogUtils;
 import com.weyee.sdk.util.Tools;
 import okhttp3.*;
 
@@ -40,59 +38,51 @@ public abstract class WeYeeEncryptInterceptor implements Interceptor {
 
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
-        Request request = chain.request();
-        request = encrypt(request);
-        return chain.proceed(request);
+        return chain.proceed(encrypt(chain.request()));
     }
 
     /**
      * 加密
      */
     private Request encrypt(Request request) {
-        Headers paramsHeads = request.headers();
-        HashMap<String, Object> params = new HashMap<>(1);
+        //获取到方法
+        String method = request.method();
 
-        for (int i = 0, count = paramsHeads.size(); i < count; i++) {
-            String name = paramsHeads.name(i);
-            params.put(name, paramsHeads.value(i));
-        }
+        if (method.equals("POST")) {
+            HashMap<String, Object> params = new HashMap<>(1);
 
-        RequestBody requestBody = request.body();
-        //请求体
-        if (requestBody instanceof FormBody) {
-            FormBody formBody = (FormBody) requestBody;
-            for (int i = 0; i < formBody.size(); i++) {
-                params.put(formBody.encodedName(i), formBody.value(i));
-            }
-        }
-
-        requestHttpPrepare(params);
-
-        MultipartBody.Builder builder = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM);
-
-        for (Map.Entry<String, Object> entry : params.entrySet()) {
-            Object value = entry.getValue();
-            if (value != null) {
-                //图片 "*/image"
-                if (value instanceof File) {
-                    builder.addFormDataPart(entry.getKey(), ((File) value).getName(),
-                            RequestBody.create(MediaType.parse("image/png"), (File) value));
-                    continue;
+            RequestBody requestBody = request.body();
+            //请求体
+            if (requestBody instanceof FormBody) {
+                FormBody formBody = (FormBody) requestBody;
+                for (int i = 0; i < formBody.size(); i++) {
+                    params.put(formBody.encodedName(i), formBody.value(i));
                 }
-                builder.addFormDataPart(entry.getKey(), entry.getValue().toString());
             }
-        }
 
-        //printlnUrl(request, params);
-        return request.newBuilder().method(request.method(), builder.build()).build();
+            requestHttpPrepare(params);
+
+            MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                Object value = entry.getValue();
+                if (value != null) {
+                    //图片 "*/image"
+                    if (value instanceof File) {
+                        builder.addFormDataPart(entry.getKey(), ((File) value).getName(),
+                                RequestBody.create(MediaType.parse("image/png"), (File) value));
+                        continue;
+                    }
+                    builder.addFormDataPart(entry.getKey(), entry.getValue().toString());
+                }
+            }
+            return request.newBuilder().post(requestBody).build();
+        } else {
+            return request;
+        }
     }
 
-    private void printlnUrl(Request request, HashMap<String, Object> params) {
-        if (!Environment.isDebug()) {
-            return;
-        }
-
+    private String printlnUrl(Request request, HashMap<String, Object> params) {
         StringBuilder builderStr = new StringBuilder();
         builderStr.append(request.url());
         builderStr.append("?");
@@ -110,8 +100,8 @@ public abstract class WeYeeEncryptInterceptor implements Interceptor {
                 builderStr.append("&");
             }
         }
+        return builderStr.toString();
 
-        LogUtils.i(builderStr.toString());
     }
 
     /**
@@ -130,7 +120,7 @@ public abstract class WeYeeEncryptInterceptor implements Interceptor {
         params.put("app_type", "APP");
     }
 
-    private static String getSignature(String appKey, Map<String, Object> params) {
+    private String getSignature(String appKey, Map<String, Object> params) {
         // 拿key
         Set<Map.Entry<String, Object>> set = params.entrySet();
         Iterator<Map.Entry<String, Object>> iterator = set.iterator();
