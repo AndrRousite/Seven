@@ -5,10 +5,8 @@ import com.weyee.poscore.di.scope.ActivityScope
 import com.weyee.poscore.mvp.BaseModel
 import com.wuqi.a_service.services.LotteryCache
 import com.wuqi.a_service.services.LotteryService
-import com.wuqi.a_service.wan.cache.BounsCache
-import com.wuqi.a_service.wan.cache.CategoryCache
-import com.wuqi.a_service.wan.cache.HistoryCache
-import com.wuqi.a_service.wan.cache.InfoCache
+import com.wuqi.a_service.services.WeChatService
+import com.wuqi.a_service.wan.cache.*
 import io.reactivex.Observable
 import io.rx_cache2.DynamicKey
 import io.rx_cache2.EvictDynamicKey
@@ -21,6 +19,8 @@ import javax.inject.Inject
 @ActivityScope
 class LotteryModel @Inject constructor(repositoryManager: IRepositoryManager?) : BaseModel(repositoryManager),
     LotteryContract.Model {
+
+
     override fun lotterys(): Observable<List<LotteryCategory>> {
         return mRepositoryManager.obtainCacheService(LotteryCache::class.java).lotterys(
             mRepositoryManager.obtainRetrofitService(LotteryService::class.java).lotterys().map {
@@ -65,6 +65,16 @@ class LotteryModel @Inject constructor(repositoryManager: IRepositoryManager?) :
                 BounsCache(it.error_code, it.reason, it.result)
             },
             DynamicKey(String.format("%s%s%s%s", LotteryService.ApiKey, lottery_id, lottery_no, lottery_res)),
+            EvictDynamicKey(false)
+        ).map { it.result }
+    }
+
+    override fun wechats(page: Int, page_size: Int): Observable<WechatInfo> {
+        return mRepositoryManager.obtainCacheService(LotteryCache::class.java).wechats(
+            mRepositoryManager.obtainRetrofitService(WeChatService::class.java).wechats(page, page_size).map {
+                WechatCache(it.error_code, it.reason, it.result)
+            },
+            DynamicKey(String.format("%s%s%s", LotteryService.ApiKey, page, page_size)),
             EvictDynamicKey(false)
         ).map { it.result }
     }

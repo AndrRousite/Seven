@@ -67,4 +67,8 @@ public class WorkerNavigation extends Navigation {
         bundle.putString("lottery_id", lottery_id);
         startActivity("LotteryDetail", bundle);
     }
+
+    public void toWeChatSelectionActivity() {
+        startActivity("WeChatSelection");
+    }
 }

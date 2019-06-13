@@ -1,9 +1,6 @@
 package com.wuqi.a_service.services
 
-import com.wuqi.a_service.wan.cache.BounsCache
-import com.wuqi.a_service.wan.cache.CategoryCache
-import com.wuqi.a_service.wan.cache.HistoryCache
-import com.wuqi.a_service.wan.cache.InfoCache
+import com.wuqi.a_service.wan.cache.*
 import io.reactivex.Observable
 import io.rx_cache2.DynamicKey
 import io.rx_cache2.EvictProvider
@@ -55,5 +52,15 @@ interface LotteryCache {
         dynamicKey: DynamicKey,
         evictProvider: EvictProvider
     ): Observable<BounsCache>
+
+    /**
+     * 微信精选
+     */
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    fun wechats(
+        wecahts: Observable<WechatCache>,
+        dynamicKey: DynamicKey,
+        evictProvider: EvictProvider
+    ): Observable<WechatCache>
 
 }

@@ -23,8 +23,8 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="60dp"
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
@@ -110,5 +110,15 @@
             android:layout_gravity="center_vertical|left"
             android:gravity="center_vertical|right"
             android:layout_height="match_parent"/>
+
+    <androidx.core.widget.ContentLoadingProgressBar android:layout_width="match_parent"
+                                                    android:layout_gravity="bottom"
+                                                    android:id="@+id/pbLoading"
+                                                    style="?android:attr/android:progressBarStyleHorizontal"
+                                                    tools:progress="50"
+                                                    android:max="100"
+                                                    android:visibility="gone"
+                                                    tools:visibility="visible"
+                                                    android:layout_height="2dp"/>
 
 </FrameLayout>

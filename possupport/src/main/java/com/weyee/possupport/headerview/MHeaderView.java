@@ -19,11 +19,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -43,6 +45,7 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
     private TextView tvMenuRightThree;
     private TextView tvMenuRightTwo;
     private TextView tvMenuRightOne;
+    private ProgressBar pbLoading;
     private View bottomLine;
     private View newMsgView;
 
@@ -56,6 +59,7 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
     private int menuRightThreeTextColor;
     private int menuRightThreeIcon;
     private int lineColor;
+    private int progressBarColor;
     private int menuLeftCloseIcon;
 
     public MHeaderView(Context context) {
@@ -77,6 +81,7 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
 
             titleColor = typedArray.getColor(R.styleable.MHeaderView_header_title_color, Color.WHITE);
             lineColor = typedArray.getColor(R.styleable.MHeaderView_header_line, Color.TRANSPARENT);
+            progressBarColor = typedArray.getColor(R.styleable.MHeaderView_header_progress, Color.TRANSPARENT);
 
             menuLeftCloseIcon = typedArray.getResourceId(R.styleable
                     .MHeaderView_header_menu_left_close_icon, 0);
@@ -120,12 +125,14 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
         tvMenuRightOne = findViewById(R.id.tvMenuRightOne);
         tvMenuRightTwo = findViewById(R.id.tvMenuRightTwo);
         tvMenuRightThree = findViewById(R.id.tvMenuRightThree);
+        pbLoading = findViewById(R.id.pbLoading);
         bottomLine = findViewById(R.id.bottomLine);
         newMsgView = findViewById(R.id.newMsgView);
 
 
         setTitleTextColor(titleColor);
         setBottomLineColor(lineColor);
+        setProgressBarColor(progressBarColor);
 
         setMenuLeftCloseIcon(menuLeftCloseIcon);
 
@@ -193,6 +200,11 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
     }
 
     @Override
+    public void isShowProgress(boolean isShow) {
+        isShowView(pbLoading, isShow);
+    }
+
+    @Override
     public void isShowLine(boolean isShow) {
         if (isShow) {
             bottomLine.setVisibility(VISIBLE);
@@ -229,6 +241,16 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
     @Override
     public TextView getTitleView() {
         return tvTitle;
+    }
+
+    @Override
+    public ProgressBar getProgressBar() {
+        return pbLoading;
+    }
+
+    @Override
+    public void setProgressBarColor(@ColorInt int colorId) {
+        pbLoading.getIndeterminateDrawable().setColorFilter(colorId, PorterDuff.Mode.MULTIPLY);
     }
 
     @Override
@@ -352,6 +374,12 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
         tvTitle.setText(title);
     }
 
+    @Override
+    public void setTitle(String title, int gravity) {
+        tvTitle.setGravity(gravity);
+        tvTitle.setText(title);
+    }
+
     /**
      * 是否显示信息的点
      *
@@ -388,6 +416,11 @@ public class MHeaderView extends Toolbar implements MHeaderViewAble {
     @Override
     public void setBackgroundDrawable(int background) {
         super.setBackgroundDrawable(getDrawable(getContext(), background));
+    }
+
+    @Override
+    public void setProgress(int progress) {
+        pbLoading.setProgress(progress);
     }
 
     private static Drawable getDrawable(Context context, int resId) {

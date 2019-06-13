@@ -19,6 +19,7 @@
     <declare-styleable name="MHeaderView">
         <attr name="header_title_color" format="color"/>
         <attr name="header_line" format="color"/>
+        <attr name="header_progress" format="color"/>
 
         <attr name="header_menu_left_close_icon" format="reference"/>
 

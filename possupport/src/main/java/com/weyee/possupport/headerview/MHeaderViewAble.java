@@ -16,6 +16,7 @@
 package com.weyee.possupport.headerview;
 
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
@@ -49,6 +50,8 @@ public interface MHeaderViewAble {
 
     void isShowMenuRightThreeView(boolean isShow);
 
+    void isShowProgress(boolean isShow);
+
     void isShowLine(boolean isShow);
 
     TextView getMenuLeftBackView();
@@ -62,6 +65,10 @@ public interface MHeaderViewAble {
     TextView getMenuRightThreeView();
 
     TextView getTitleView();
+
+    ProgressBar getProgressBar();
+
+    void setProgressBarColor(@ColorInt int colorId);
 
     void setBottomLineColor(@ColorInt int colorId);
 
@@ -95,9 +102,13 @@ public interface MHeaderViewAble {
 
     void setTitle(String title);
 
+    void setTitle(String title, int gravity);
+
     void setBackgroundColor(@ColorInt int color);
 
     void setBackgroundDrawable(@DrawableRes int background);
+
+    void setProgress(int progress);
 
     /**
      * 是否显示新消息的点

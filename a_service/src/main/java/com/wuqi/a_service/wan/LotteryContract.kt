@@ -19,8 +19,12 @@ interface LotteryContract {
 
     interface MachineView : View
     interface DetailView : View {
-        fun setHeadData(lottery_no:String?,lottery_date:String?,data: List<BallBean>?)
+        fun setHeadData(lottery_no: String?, lottery_date: String?, data: List<BallBean>?)
         fun setInfoData(data: List<Any>?)
+    }
+
+    interface WechatView : View {
+        fun setInfoData(data: WechatInfo?)
     }
 
     interface Model : IModel {
@@ -31,5 +35,7 @@ interface LotteryContract {
         fun historys(lottery_id: String, page: Int, page_size: Int): Observable<LotteryHistory>
 
         fun bonus(lottery_id: String, lottery_no: String, lottery_res: String): Observable<LotteryBonus>
+
+        fun wechats(page: Int, page_size: Int): Observable<WechatInfo>
     }
 }

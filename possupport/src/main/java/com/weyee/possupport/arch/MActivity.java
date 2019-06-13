@@ -137,7 +137,7 @@ public class MActivity extends InnerBaseActivity {
      */
     @Nullable
     @Deprecated
-    public static <T> T getPresenter(Object object) {
+    public <T> T getPresenter(Object object) {
         Type type = object.getClass().getGenericSuperclass();
         if (type == null) {
             return null;

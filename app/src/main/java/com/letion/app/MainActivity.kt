@@ -74,7 +74,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 //        }.start()
 
         BarUtils.setStatusBarAlpha(this, 0, true)
-        BarUtils.setStatusBarLightMode(this,true)
+        BarUtils.setStatusBarLightMode(this, true)
         headerView.isShowMenuLeftBackView(false)
         appBarLayout.setBackgroundDrawable(resources.getDrawable(R.drawable.action_bar_img))
 
@@ -84,8 +84,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 
         //presenter = MainPresenter(this)
 
-        val array = arrayOfNulls<String>(46)
-        for (i in 0 until 46) {
+        val array = arrayOfNulls<String>(47)
+        for (i in 0 until 47) {
             array[i] = "这是第${i}个"
         }
 
@@ -210,6 +210,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
                     }
                     44 -> {
                         WorkerNavigation(this@MainActivity).toLotteryActivity()
+                    }
+                    45 -> {
+                        WorkerNavigation(this@MainActivity).toWeChatSelectionActivity()
                     }
                     else -> {
                         Bus.getDefault().get<IEvent>(1)?.value = NormalEvent()

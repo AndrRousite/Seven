@@ -22,7 +22,7 @@ import com.weyee.sdk.dialog.MenuDialog
 import com.weyee.sdk.imageloader.ImageLoader
 import com.weyee.sdk.imageloader.glide.GlideImageConfig
 import com.weyee.sdk.multitype.*
-import com.weyee.sdk.permission.MediaIntents
+import com.weyee.sdk.router.BrowserNavigation
 import com.weyee.sdk.router.MainNavigation
 import com.weyee.sdk.router.Path
 import com.weyee.sdk.router.WorkerNavigation
@@ -155,8 +155,8 @@ class WanActivity : BaseActivity<WanPresenter>(), WanContract.WanView {
         adapter = object : BaseAdapter<Any>(null,
             OnRecyclerViewItemClickListener<Any> { _, _, data, _ ->
                 if (data is ArticleBeanData) {
-                    startActivity(MediaIntents.newOpenWebBrowserIntent(data.link))
-                    //WorkerNavigation(context).toDetailActivity(data.link)
+                    //startActivity(MediaIntents.newOpenWebBrowserIntent(data.link))
+                    BrowserNavigation(this@WanActivity).toBrowserActivity(data.link)
                 }
             }) {
             override fun getHolder(v: View, viewType: Int): BaseHolder<Any> {

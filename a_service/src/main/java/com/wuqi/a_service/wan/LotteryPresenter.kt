@@ -283,4 +283,24 @@ class LotteryPresenter @Inject constructor(model: LotteryModel?, rootView: Lotte
 
         return arrayOf(String.format("%.2f", amount), unit)
     }
+
+
+    fun wechats(page: Int, pageSize: Int) {
+        mModel.wechats(page, pageSize)
+            .compose(Transformer.switchSchedulers(progressAble))
+            .`as`(RxLiftUtils.bindLifecycle(lifecycleOwner))
+            .subscribe(object : ProgressSubscriber<WechatInfo>() {
+                override fun onSuccess(t: WechatInfo?) {
+                    if (mView is LotteryContract.WechatView) {
+                        (mView as LotteryContract.WechatView).setInfoData(t)
+                    }
+                }
+
+                override fun onCompleted() {
+                    super.onCompleted()
+                    mView.onCompleted()
+                }
+
+            })
+    }
 }

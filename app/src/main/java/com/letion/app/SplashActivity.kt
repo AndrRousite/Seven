@@ -82,8 +82,10 @@ class SplashActivity : AppCompatActivity() {
                     override fun onAnimationEnd(animation: Animator?) {
                         startActivity(Intent(this@SplashActivity, MainActivity::class.java))
                         // Preview Window设置的背景图如果不做处理，图片就会一直存在于内存中
-                        window.setBackgroundDrawable(null)
-                        finish()
+                        window.decorView.postDelayed({
+                            window.setBackgroundDrawable(null)
+                            finish()
+                        }, 50)
                     }
                 })
             }.onDenied {
