@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.annotation.RequiresApi
@@ -69,6 +70,7 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
+                resolveElements()
                 super.onPageFinished(view, url)
                 sonicSession?.sessionClient?.pageFinish(url)
                 headerView.setTitle(view?.title)
@@ -130,6 +132,7 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
             SonicJavaScriptInterface(sonicSession?.sessionClient, intent),
             "sonic"
         )
+        webView.addJavascriptInterface(ImageJavaScriptInterface(), "injectedObject")
 
         // init webview settings
         webSettings.allowContentAccess = true
@@ -156,6 +159,60 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
 
     override fun useProgressAble(): Boolean {
         return !super.useProgressAble()
+    }
+
+    /**
+     * 处理部分标签，并给他添加js代码，通过js调用Java处理
+     */
+    private fun resolveElements() {
+// 这段js函数的功能就是，遍历所有的img节点，并添加onclick函数，函数的功能是在图片点击的时候调用本地java接口并传递url过去
+        // 如要点击一张图片在弹出的页面查看所有的图片集合,则获取的值应该是个图片数组
+        webView.loadUrl(
+            "javascript:(function(){" +
+                    "var objs = document.getElementsByTagName(\"img\");" +
+                    "for(var i=0;i<objs.length;i++)" +
+                    "{" +
+                    "objs[i].onclick=function(){window.injectedObject.imageClick(this.getAttribute(\"src\"),this.getAttribute(\"alt\"));}" +
+                    "}" +
+                    "})()"
+//            "javascript:(function () {" +
+//                    "    var objs = document.getElementsByTagName(\"img\");" +
+//                    "    var links = [], alts = [];" +
+//                    "    for (var i = 0; i < objs.length; i++) {" +
+//                    "        links.push(objs[i].getAttribute(\"src\"));" +
+//                    "        alts.push(objs[i].getAttribute(\"alt\"));" +
+//                    "    }" +
+//                    "    for (var i = 0; i < objs.length; i++) {" +
+//                    "        objs[i].onclick = function () {" +
+//                    "            window.injectedObject.imageClick(i, links, alts);" +
+//                    "        }" +
+//                    "    }" +
+//                    "})()"
+        )
+        // 遍历所有的a节点,将节点里的属性传递过去(属性自定义,用于页面跳转)
+        webView.loadUrl(
+            "javascript:(function(){" +
+                    "var objs =document.getElementsByTagName(\"a\");" +
+                    "for(var i=0;i<objs.length;i++)" +
+                    "{" +
+                    "objs[i].onclick=function(){" +
+                    "window.injectedObject.textClick(this.getAttribute(\"href\"),this.getAttribute" +
+                    "(\"target\"));}" +
+                    "}" +
+                    "})()"
+        )
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (webView.canGoBack()) {
+                webView.goBack()
+                return true
+            } else {
+                webView.loadUrl("about:blank")
+            }
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onDestroy() {

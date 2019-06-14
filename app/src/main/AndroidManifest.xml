@@ -55,8 +55,15 @@
         </activity>
         <activity
                 android:name=".photo.MImageViewActivity"
-                android:theme="@style/AppTheme.Photo"/>
+                android:theme="@style/AppTheme.Photo">
+            <intent-filter>
+                <action android:name="com.letion.app.photoview"/>
+                <category android:name="com.letion.app.category.photoview"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".photo.PhotoViewActivity">
+
         </activity>
         <activity android:name=".SpinnerActivity">
         </activity>
