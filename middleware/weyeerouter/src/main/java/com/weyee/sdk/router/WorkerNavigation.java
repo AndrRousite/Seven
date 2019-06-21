@@ -71,4 +71,8 @@ public class WorkerNavigation extends Navigation {
     public void toWeChatSelectionActivity() {
         startActivity("WeChatSelection");
     }
+
+    public void toBluetoothActivity() {
+        startActivity("Bluetooth");
+    }
 }

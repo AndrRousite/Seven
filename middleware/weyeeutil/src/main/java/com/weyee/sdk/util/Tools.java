@@ -47,6 +47,10 @@ public class Tools {
         return ScreenUtils.getScreenHeight();
     }
 
+    public static int dp2px(final float dpValue) {
+        return SizeUtils.dp2px(dpValue);
+    }
+
     public static boolean createOrExistsDir(File file) {
         return FileUtils.createOrExistsDir(file);
     }

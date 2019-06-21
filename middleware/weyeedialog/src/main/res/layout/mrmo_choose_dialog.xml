@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center"
+              android:background="#ffffff"
+              android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textColor="#454953"
+            android:textSize="15sp"
+            tools:text="Title"/>
+
+    <ListView android:layout_width="match_parent"
+              android:id="@+id/listView"
+              android:scrollbars="none"
+              android:layout_height="wrap_content">
+
+    </ListView>
+</LinearLayout>

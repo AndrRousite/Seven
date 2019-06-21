@@ -55,6 +55,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
     private var isBindService: Boolean = false
     private var receiver: BroadcastReceiver? = null
 
+    companion object {
+        const val SIZE = 48
+    }
+
     /**
      * 如果initView返回0,框架则不会调用[android.app.Activity.setContentView]
      *
@@ -84,8 +88,8 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 
         //presenter = MainPresenter(this)
 
-        val array = arrayOfNulls<String>(47)
-        for (i in 0 until 47) {
+        val array = arrayOfNulls<String>(SIZE)
+        for (i in 0 until SIZE) {
             array[i] = "这是第${i}个"
         }
 
@@ -213,6 +217,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
                     }
                     45 -> {
                         WorkerNavigation(this@MainActivity).toWeChatSelectionActivity()
+                    }
+                    46 -> {
+                        WorkerNavigation(this@MainActivity).toBluetoothActivity()
                     }
                     else -> {
                         Bus.getDefault().get<IEvent>(1)?.value = NormalEvent()

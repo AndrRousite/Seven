@@ -23,6 +23,8 @@ public class BaseDialog extends Dialog {
 
     public BaseDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
+        setCancelable(true);
+        setCanceledOnTouchOutside(true);
     }
 
     @Override

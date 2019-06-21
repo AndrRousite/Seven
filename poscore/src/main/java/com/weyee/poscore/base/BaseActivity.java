@@ -59,12 +59,18 @@ public abstract class BaseActivity<P extends IPresenter> extends MActivity imple
 
     @Override
     public void showProgress() {
+        showProgress("加载中...");
+    }
+
+    @Override
+    public void showProgress(String tips) {
         try {
             if (!isFinishing()) {
                 if (mDialog != null) {
                     if (!mDialog.isShowing()) {
                         mDialog.show();
                     }
+                    mDialog.setTitle(tips);
                 } else {
                     if (this instanceof IView) {
                         ((IView) this).showLoading();

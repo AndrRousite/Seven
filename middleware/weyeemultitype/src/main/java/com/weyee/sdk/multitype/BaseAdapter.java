@@ -116,7 +116,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
      * @return 数据
      */
     public T getItem(int position) {
-        return mList == null ? null : mList.get(position);
+        return mList == null ? null : (position >= mList.size() || position < 0 ? null : mList.get(position));
     }
 
     /**
@@ -163,7 +163,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     public void add(@Nullable T data) {
         if (data == null) return;
         mList.add(data);
-        notifyDataSetChanged();
+        notifyItemInserted(mList.size() - 1);
     }
 
     @Override
@@ -171,7 +171,7 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
         if (data == null) return;
         if (position < 0 || position >= mList.size()) return;
         mList.add(position, data);
-        notifyDataSetChanged();
+        notifyItemInserted(position);
     }
 
     @Override
@@ -207,7 +207,8 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     }
 
     @Override
-    public void modify(@Nullable T oldData, @Nullable T newData) {
+    public void modify(@Nullable T oldData, @Nullable T newData, @Nullable Object object) {
+        if (object != null) throw new IllegalArgumentException("参数错误"); // 这个是有道理的，误删
         modify(mList.indexOf(oldData), newData);
     }
 
@@ -215,21 +216,19 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     public void modify(int index, @Nullable T newData) {
         if (index < 0 || index >= mList.size()) return;
         mList.set(index, newData);
-        notifyDataSetChanged();
+        notifyItemChanged(index);
     }
 
     @Override
-    public boolean remove(@Nullable T data) {
-        if (data == null) return false;
-        boolean result = mList.remove(data);
-        notifyDataSetChanged();
-        return result;
+    public void remove(@Nullable T data) {
+        if (data == null) return;
+        remove(mList.indexOf(data));
     }
 
     @Override
     public void remove(int index) {
         if (index < 0 || index >= mList.size()) return;
         mList.remove(index);
-        notifyDataSetChanged();
+        notifyItemRemoved(index);
     }
 }

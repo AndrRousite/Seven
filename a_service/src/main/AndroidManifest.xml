@@ -7,15 +7,20 @@
     <uses-permission android:name="android.permission.RECEIVE_SMS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
     <application>
+        <activity android:name=".BluetoothActivity">
+        </activity>
+
         <service android:name=".StickService"/>
 
         <activity android:name=".WorkerActivity">
         </activity>
         <activity android:name=".WanActivity">
-        </activity>
-
-        <!-- <receiver android:name=".SmsReceiver" tools:ignore="ExportedReceiver"> -->
+        </activity> <!-- <receiver android:name=".SmsReceiver" tools:ignore="ExportedReceiver"> -->
         <!-- <intent-filter android:priority="1000"> -->
         <!-- <action android:name="android.provider.Telephony.SMS_RECEIVED"/> -->
         <!-- </intent-filter> -->

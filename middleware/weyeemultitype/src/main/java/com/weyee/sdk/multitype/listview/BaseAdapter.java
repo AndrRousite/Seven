@@ -29,7 +29,7 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter implemen
 
     @Override
     public T getItem(int position) {
-        return mList == null ? null : mList.get(position);
+        return mList == null ? null : (position >= mList.size() || position < 0 ? null : mList.get(position));
     }
 
     @Override
@@ -128,7 +128,7 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter implemen
     }
 
     @Override
-    public void modify(@Nullable T oldData, @Nullable T newData) {
+    public void modify(@Nullable T oldData, @Nullable T newData, @Nullable Object object) {
         modify(mList.indexOf(oldData), newData);
     }
 
@@ -140,11 +140,10 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter implemen
     }
 
     @Override
-    public boolean remove(@Nullable T data) {
-        if (data == null) return false;
-        boolean result = mList.remove(data);
+    public void remove(@Nullable T data) {
+        if (data == null) return;
+        mList.remove(data);
         notifyDataSetChanged();
-        return result;
     }
 
     @Override

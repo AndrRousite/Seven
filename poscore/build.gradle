@@ -78,6 +78,11 @@ dependencies {
     // butterknife
     api libsConfig.butterknife
     annotationProcessor libsConfig.butterknifeCompiler
+
+    // zxing
+    api libsConfig.zxing
+
+
     api project(':middleware:weyeeapi')
     api project(':middleware:weyeedialog')
     api project(':middleware:weyeeevent')
@@ -96,9 +101,9 @@ dependencies {
     api project(':middleware:weyeemedialoader')
     api project(':middleware:weyeeutil')
     api project(':middleware:weyeeaspectj')
+    api project(':middleware:weyeeprint')
     api project(':possupport')
     api project(':poswidget')
-
 
 
     //    // glide

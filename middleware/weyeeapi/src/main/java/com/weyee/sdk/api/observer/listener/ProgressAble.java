@@ -9,6 +9,10 @@ package com.weyee.sdk.api.observer.listener;
  */
 public interface ProgressAble {
     void initProgressAble();
+
     void showProgress();
+
+    void showProgress(String tips);
+
     void hideProgress();
 }

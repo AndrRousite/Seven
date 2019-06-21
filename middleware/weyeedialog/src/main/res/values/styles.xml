@@ -16,11 +16,20 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
+    <style name="QMUI.ChooseDialog" parent="@style/QMUI.Dialog">
+        <item name="android:windowAnimationStyle">@style/QMUI.Dialog.Anim.Bottom</item>
+    </style>
+
     <style name="QMUI.LoadingDialog.Progress" parent="android:Theme">
         <item name="android:indeterminateDrawable">@drawable/mrmo_rotate_dialog_loading</item>
         <item name="android:minWidth">25dp</item>
         <item name="android:minHeight">25dp</item>
         <item name="android:maxWidth">60dp</item>
         <item name="android:maxHeight">60dp</item>
+    </style>
+
+    <style name="QMUI.Dialog.Anim.Bottom" parent="android:Theme">
+        <item name="android:windowEnterAnimation">@anim/dialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/dialog_out_anim</item>
     </style>
 </resources>

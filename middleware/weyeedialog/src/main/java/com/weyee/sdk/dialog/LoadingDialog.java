@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * 很友好的加载弹窗
@@ -50,9 +51,15 @@ public class LoadingDialog extends BaseDialog {
         tvTips.setText(tips);
     }
 
-    public void setTvTips(String tips) {
+    @Override
+    public void setTitle(int titleId) {
+        setTitle(getContext().getResources().getString(titleId));
+    }
+
+    @Override
+    public void setTitle(@Nullable CharSequence title) {
         if (tvTips != null) {
-            tvTips.setText(tips);
+            tvTips.setText(title);
         }
     }
 }

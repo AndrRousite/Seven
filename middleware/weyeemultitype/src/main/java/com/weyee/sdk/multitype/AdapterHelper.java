@@ -29,11 +29,11 @@ public interface AdapterHelper<T> {
 
     List<T> getAll();
 
-    void modify(@Nullable T oldData, @Nullable T newData);
+    void modify(@Nullable T oldData, @Nullable T newData, @Nullable Object object);
 
     void modify(int index, @Nullable T newData);
 
-    boolean remove(@Nullable T data);
+    void remove(@Nullable T data);
 
     void remove(int index);
 }
