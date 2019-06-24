@@ -43,8 +43,12 @@ public class PrintWriter150mm extends PrintWriter {
         return 200;
     }
 
+    /**
+     * 810 = 200 * 3(110最多一行三个) + 70 * 3（一行最多三个）
+     * @return
+     */
     @Override
     public int getPaperMaxWidth() {
-        return 800;
+        return 810;
     }
 }

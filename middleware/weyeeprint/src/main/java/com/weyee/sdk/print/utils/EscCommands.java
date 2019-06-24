@@ -876,6 +876,36 @@ final class EscCommands {
     }
 
     /**
+     * Turn on black-and-white color reversal
+     * GS B n
+     *
+     * @return bytes for this command
+     */
+    @SuppressWarnings("unused")
+    public static byte[] turnWhiteBlackReverseOn() {
+        byte[] result = new byte[3];
+        result[0] = GS;
+        result[1] = 66;
+        result[2] = 1;
+        return result;
+    }
+
+    /**
+     * Turn off black-and-white color reversal
+     * GS B n
+     *
+     * @return bytes for this command
+     */
+    @SuppressWarnings("unused")
+    public static byte[] turnWhiteBlackReverseOff() {
+        byte[] result = new byte[3];
+        result[0] = GS;
+        result[1] = 66;
+        result[2] = 0;
+        return result;
+    }
+
+    /**
      * Selects a mode for cutting paper and executes paper cutting. The value of m selects the mode
      * as follows:
      * m=1,49 : Partial cut(one point center uncut)

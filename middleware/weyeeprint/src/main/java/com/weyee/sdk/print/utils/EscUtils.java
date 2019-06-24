@@ -135,6 +135,24 @@ public class EscUtils {
     }
 
     /**
+     * 开启黑白反色
+     *
+     * @return
+     */
+    public static byte[] turnWhiteBlackReverseOn() {
+        return EscCommands.turnWhiteBlackReverseOn();
+    }
+
+    /**
+     * 关闭黑白反色
+     *
+     * @return
+     */
+    public static byte[] turnWhiteBlackReverseOff() {
+        return EscCommands.turnWhiteBlackReverseOff();
+    }
+
+    /**
      * 进纸切割
      * Feeds paper to ( cutting position + n x vertical motion unit )
      * and executes a full cut ( cuts the paper completely )

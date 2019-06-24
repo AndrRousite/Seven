@@ -4,7 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import androidx.annotation.Nullable;
 import com.weyee.sdk.print.Interface.ITemplateAble;
+import com.weyee.sdk.print.constant.PaperSize;
 import com.weyee.sdk.print.utils.EscUtils;
 import com.weyee.sdk.print.utils.Utils;
 
@@ -145,6 +147,76 @@ abstract class PrintWriter implements ITemplateAble {
     }
 
     @Override
+    public void printText(@Nullable String left, @Nullable String center, @Nullable String right) {
+        printText(left, center, right, CHARSET);
+    }
+
+    @Override
+    public void printText(@Nullable String left, @Nullable String center, @Nullable String right, String charsetName) {
+        if (TextUtils.isEmpty(left) && TextUtils.isEmpty(center) && TextUtils.isEmpty(right)) return;
+        int length = getLineWidth(normalTextSize);
+
+        int ratio = 3;
+        if (!TextUtils.isEmpty(left) && TextUtils.isEmpty(center)) {
+            ratio = 2;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        int hasLength = (int) Math.floor(length / (float) ratio);
+
+        // 左边
+        int strLength = getStringWidth(left);
+        if (strLength >= hasLength) sb.append(left != null ? left.substring(0, hasLength - 1) : "").append("*");
+        else {
+            sb.append(left == null ? "" : left);
+            int needEmpty = hasLength - strLength;
+            while (needEmpty > 0) {
+                sb.append(" ");
+                needEmpty--;
+            }
+        }
+
+        // 中间
+        if (!TextUtils.isEmpty(center)) {
+            int str2Length = getStringWidth(center);
+            if (str2Length >= hasLength)
+                sb.append(center != null ? center.substring(0, hasLength - 1) : "").append("*");
+            else {
+                int needEmpty = hasLength - str2Length;
+                int tempEmpty = needEmpty / 2;  // 取中间值
+                while (needEmpty > tempEmpty) {
+                    sb.append(" ");
+                    needEmpty--;
+                }
+                sb.append(center);
+                while (needEmpty > 0) {
+                    sb.append(" ");
+                    needEmpty--;
+                }
+            }
+        }
+
+        // 右边
+        int str3Length = getStringWidth(right);
+        if (str3Length >= hasLength) sb.append(right != null ? right.substring(0, hasLength - 1) : "").append("*");
+        else {
+            int needEmpty = hasLength - str3Length;
+            while (needEmpty > 0) {
+                sb.append(" ");
+                needEmpty--;
+            }
+            sb.append(right == null ? "" : right);
+        }
+
+        try {
+            write(sb.toString().getBytes(charsetName));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public void printImage(Drawable drawable) {
         int maxWidth = getSingleDrawableMaxWidth();
         Bitmap image = Utils.scalingDrawable(drawable, maxWidth);
@@ -180,6 +252,8 @@ abstract class PrintWriter implements ITemplateAble {
         if (elements == null || elements.isEmpty()) return;
         SparseArray<Bitmap> map = new SparseArray<>();
         for (int i = 0; i < elements.size(); i++) {
+            // 58mm和80mm的打印机一行只能打印两个二维码
+            if ((paper == PaperSize.PAPER_SIZE_58 || paper == PaperSize.PAPER_SIZE_80) && i > 1) break;
             Bitmap bitmap = Utils.createQrcode(elements.get(i), getMultipleDrawableMaxWidth(), remarks != null && remarks.size() > i ? remarks.get(i) : null);
             map.put(i, bitmap);
         }
@@ -204,6 +278,7 @@ abstract class PrintWriter implements ITemplateAble {
             length--;
         }
         printText(line.toString());
+        printLineFeed(); // 换行
     }
 
     @Override

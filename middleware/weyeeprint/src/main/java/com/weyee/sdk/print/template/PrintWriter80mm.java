@@ -43,9 +43,13 @@ public class PrintWriter80mm extends PrintWriter {
         return 150;
     }
 
+    /**
+     * 440 = 150 * 2(110最多一行两个) + 70 * 2（一行最多两个个）
+     * @return
+     */
     @Override
     public int getPaperMaxWidth() {
-        return 560;
+        return 440;
     }
 
 }

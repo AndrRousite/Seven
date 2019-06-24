@@ -3,6 +3,7 @@ package com.weyee.sdk.print.Interface;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import androidx.annotation.IntRange;
+import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.util.List;
@@ -86,6 +87,25 @@ public interface ITemplateAble {
      * @param ratios
      */
     void printText(String[] strings, int[] ratios, String charsetName);
+
+
+    /**
+     * 根据gravity去打印一行的文本数据
+     *
+     * @param left   排在左边的数据
+     * @param center
+     * @param right
+     */
+    void printText(@Nullable String left, @Nullable String center, @Nullable String right);
+
+    /**
+     * 根据gravity去打印一行的文本数据
+     *
+     * @param left   排在左边的数据
+     * @param center
+     * @param right
+     */
+    void printText(@Nullable String left, @Nullable String center, @Nullable String right, String charsetName);
 
     /**
      * 打印图片
