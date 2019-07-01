@@ -2,8 +2,8 @@ package com.wuqi.a_service.ticktdata
 
 import com.weyee.poscore.base.ThreadPool
 import com.weyee.sdk.print.Interface.ITemplateAble
+import com.weyee.sdk.print.PrintManager
 import com.weyee.sdk.print.constant.PaperSize
-import com.weyee.sdk.print.manager.ble.BluetoothUtils
 import com.weyee.sdk.print.template.*
 
 
@@ -12,7 +12,7 @@ import com.weyee.sdk.print.template.*
  * @author wuqi by 2019-06-20.
  */
 class TestPrintDataMaker {
-    fun printData(paper: Int, utils: BluetoothUtils) {
+    fun printData(paper: Int) {
         ThreadPool.run {
             val printer: ITemplateAble? = when (paper) {
                 PaperSize.PAPER_SIZE_58 -> PrintWriter58mm()
@@ -72,8 +72,8 @@ class TestPrintDataMaker {
 
             printer?.feedPaperCutPartial()
 
-
-            utils.write(printer?.printData)
+            PrintManager.getInstance().printLines(printer?.printData)
         }
+
     }
 }

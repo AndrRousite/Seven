@@ -23,7 +23,6 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.letion.app.state.LoadingState
 import com.weyee.poscore.base.BaseActivity
 import com.weyee.poscore.di.component.AppComponent
 import com.weyee.poscore.mvp.BaseModel
@@ -31,6 +30,7 @@ import com.weyee.poscore.mvp.BasePresenter
 import com.weyee.poscore.mvp.IView
 import com.weyee.poswidget.stateview.StateLayout
 import com.weyee.poswidget.stateview.state.ContentState
+import com.weyee.poswidget.stateview.state.LoadingState
 import com.weyee.sdk.multitype.BaseAdapter
 import com.weyee.sdk.multitype.BaseHolder
 import com.weyee.sdk.multitype.OnRecyclerViewItemClickListener

@@ -21,6 +21,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * @author wuqi by 2019-06-15.
@@ -72,6 +74,39 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    /**
+     * 分割数据
+     *
+     * @param data
+     * @param count 一份中能容纳多少个字节，4.0最大是20个字节
+     * @return
+     */
+    public static Queue<byte[]> splitByte(byte[] data, int count) {
+        Queue<byte[]> byteQueue = new LinkedList<>();
+        int pkgCount;
+        if (data.length % count == 0) {
+            pkgCount = data.length / count;
+        } else {
+            pkgCount = Math.round(data.length / (float) count + .5f);
+        }
+
+        if (pkgCount > 0) {
+            for (int i = 0; i < pkgCount; i++) {
+                byte[] dataPkg;
+                int j;
+                if (pkgCount == 1 || i == pkgCount - 1) {
+                    j = data.length % count == 0 ? count : data.length % count;
+                    System.arraycopy(data, i * count, dataPkg = new byte[j], 0, j);
+                } else {
+                    System.arraycopy(data, i * count, dataPkg = new byte[count], 0, count);
+                }
+                byteQueue.offer(dataPkg);
+            }
+        }
+
+        return byteQueue;
     }
 
     /**

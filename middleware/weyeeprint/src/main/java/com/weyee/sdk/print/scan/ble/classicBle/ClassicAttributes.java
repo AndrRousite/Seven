@@ -1,4 +1,4 @@
-package com.weyee.sdk.print.manager.ble.classicBle;
+package com.weyee.sdk.print.scan.ble.classicBle;
 
 import java.util.HashMap;
 import java.util.Map;

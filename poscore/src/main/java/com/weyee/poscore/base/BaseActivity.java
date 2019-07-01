@@ -65,18 +65,20 @@ public abstract class BaseActivity<P extends IPresenter> extends MActivity imple
     @Override
     public void showProgress(String tips) {
         try {
-            if (!isFinishing()) {
-                if (mDialog != null) {
-                    if (!mDialog.isShowing()) {
-                        mDialog.show();
-                    }
-                    mDialog.setTitle(tips);
-                } else {
-                    if (this instanceof IView) {
-                        ((IView) this).showLoading();
+            runOnUiThread(() -> {
+                if (!isFinishing()) {
+                    if (mDialog != null) {
+                        if (!mDialog.isShowing()) {
+                            mDialog.show();
+                        }
+                        mDialog.setTitle(tips);
+                    } else {
+                        if (this instanceof IView) {
+                            ((IView) this).showLoading();
+                        }
                     }
                 }
-            }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,11 +87,13 @@ public abstract class BaseActivity<P extends IPresenter> extends MActivity imple
     @Override
     public void hideProgress() {
         try {
-            if (mDialog != null)
-                mDialog.dismiss();
-            if (this instanceof IView) {
-                ((IView) this).hideLoading();
-            }
+            runOnUiThread(() -> {
+                if (mDialog != null)
+                    mDialog.dismiss();
+                if (this instanceof IView) {
+                    ((IView) this).hideLoading();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

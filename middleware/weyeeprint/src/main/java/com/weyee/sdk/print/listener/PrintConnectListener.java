@@ -14,8 +14,9 @@ public interface PrintConnectListener {
 
     /**
      * 连接中
+     * @param state {@link com.weyee.sdk.print.constant.ConnectStatus}
      */
-    void onProcess();
+    void onProcess(int state);
 
     /**
      * 连接成功

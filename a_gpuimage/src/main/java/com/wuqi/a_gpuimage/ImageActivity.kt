@@ -11,6 +11,7 @@ import com.weyee.poscore.base.App
 import com.weyee.poscore.base.BaseActivity
 import com.weyee.poscore.di.component.AppComponent
 import com.weyee.poswidget.stateview.state.ContentState
+import com.weyee.poswidget.stateview.state.LoadingState
 import com.weyee.sdk.imageloader.glide.GlideImageConfig
 import com.weyee.sdk.imageloader.progress.OnRequestListener
 import com.weyee.sdk.multitype.BaseAdapter
@@ -23,7 +24,6 @@ import com.wuqi.a_gpuimage.di.DaggerImageComponent
 import com.wuqi.a_gpuimage.di.ImageContract
 import com.wuqi.a_gpuimage.di.ImageMoudle
 import com.wuqi.a_gpuimage.di.ImagePresenter
-import com.wuqi.a_gpuimage.state.LoadingState
 import kotlinx.android.synthetic.main.activity_image.*
 
 @Route(path = Path.GPU + "Image")

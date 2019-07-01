@@ -1,4 +1,4 @@
-package com.weyee.sdk.print.manager;
+package com.weyee.sdk.print.device.external;
 
 /**
  * Wifi打印管理类

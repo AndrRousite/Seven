@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:orientation="vertical"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:layout_marginTop="150dp"
+              android:lineSpacingMultiplier="1.3"
+              android:layout_gravity="center_horizontal"
+              android:text="蓝牙未开启或者没有权限，暂无法使用该功能\n请前往Setting开始蓝牙权限"/>
+
+    <com.weyee.poswidget.layout.QMUIButton android:layout_width="match_parent" android:layout_height="wrap_content"
+                                           android:id="@+id/btnOpen"
+                                           android:background="@color/colorPrimary"
+                                           android:textColor="@color/cl_white"
+                                           android:text="前往权限设置"
+                                           android:layout_marginTop="220dp"
+                                           android:layout_marginLeft="@dimen/default_activity_16dp"
+                                           android:layout_marginRight="@dimen/default_activity_16dp"
+                                           app:qmui_radius="3dp"/>
+
+</FrameLayout>

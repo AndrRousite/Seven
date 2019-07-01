@@ -1,9 +1,10 @@
-package com.weyee.sdk.print.manager.ble;
+package com.weyee.sdk.print.scan.ble;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothProfile;
+import android.content.BroadcastReceiver;
 
 /**
  * @author wuqi by 2019-06-19.
@@ -16,6 +17,13 @@ public interface IBluetoothListener {
      * @param isScanning The bluetooth is scaning
      */
     void onScanStateChange(boolean isScanning);
+
+    /**
+     * callback by {@link BroadcastReceiver}
+     *
+     * @param newState {@link BluetoothDevice#BOND_NONE,BluetoothDevice#BOND_BONDING,BluetoothDevice#BOND_BONDED}
+     */
+    void onBondStateChange(BluetoothDevice device,int newState);
 
     /**
      * Callback reporting an LE device found during a device scan initiated

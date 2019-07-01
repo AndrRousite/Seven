@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.weyee.sdk.print">
     <application>
-        <service android:name=".manager.ble.leBle.BluetoothLeService" android:enabled="true"/>
-        <service android:name=".manager.ble.classicBle.BluetoothClassicService" android:enabled="true"/>
+        <service android:name=".scan.ble.leBle.BluetoothLeService" android:enabled="true"/>
+        <service android:name=".scan.ble.classicBle.BluetoothClassicService" android:enabled="true"/>
     </application>
 </manifest>

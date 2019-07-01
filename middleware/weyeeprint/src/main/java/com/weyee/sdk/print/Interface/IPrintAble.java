@@ -25,44 +25,4 @@ public interface IPrintAble {
      * 获取设备连接类型.定义在{@link com.weyee.sdk.print.constant.PrintType}
      */
     int getPrintType();
-
-    /**
-     * 开始单次打印
-     */
-    void onStar();
-
-    /**
-     * 失败单次打印
-     */
-    void onFail();
-
-    /**
-     * 结束单次打印: 正常流程
-     */
-    void onFinish();
-
-    /**
-     * 串口打印
-     */
-    void sataPrint();
-
-    /**
-     * WiFi打印
-     */
-    void wifiPrint();
-
-    /**
-     * usb 打印
-     */
-    void usbPrint();
-
-    /**
-     * 蓝牙打印
-     */
-    void blePrint();
-
-    /**
-     * 打印机封装的打印SDK处理
-     */
-    void otherPrint();
 }

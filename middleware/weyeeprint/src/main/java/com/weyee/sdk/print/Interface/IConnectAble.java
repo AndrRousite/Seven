@@ -13,7 +13,6 @@ public interface IConnectAble {
      * 连接打印机
      *
      * @param address  连接地址端口，连接状态回调
-     * @param listener
      */
     void connect(String address, PrintConnectListener listener);
 
@@ -27,4 +26,12 @@ public interface IConnectAble {
      * 关闭连接端口
      */
     void disconnect();
+
+
+    /**
+     * 打印数据
+     *
+     * @param bytes
+     */
+    void write(byte[] bytes);
 }

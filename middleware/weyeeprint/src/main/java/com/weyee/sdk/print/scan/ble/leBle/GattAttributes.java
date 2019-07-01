@@ -1,4 +1,4 @@
-package com.weyee.sdk.print.manager.ble.leBle;
+package com.weyee.sdk.print.scan.ble.leBle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,8 @@ import java.util.Map;
 final class GattAttributes {
     public static final Map<String, String> attributes = new HashMap<>();
     //GATT Services
+    public static final String SERVICE_GENERIC_SERVICE = "11223344-5566-7788-99AA-BBCCDDEEFF00";
+    public static final String SERVICE_GENERIC_WRITE = "00004A5B-0000-1000-8000-00805F9B34FB";
     public static final String SERVICE_GENERIC_ACCESS = "00001800-0000-1000-8000-00805F9B34FB";
     public static final String SERVICE_GENERIC_ATTRIBUTE = "00001801-0000-1000-8000-00805F9B34FB";
     public static final String SERVICE_IMMEDIATE_ALERT = "00001802-0000-1000-8000-00805F9B34FB";

@@ -1,4 +1,4 @@
-package com.weyee.sdk.print.manager;
+package com.weyee.sdk.print.device.external;
 
 /**
  * 串口打印管理类

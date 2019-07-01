@@ -1,4 +1,4 @@
-package com.weyee.sdk.print.manager.ble;
+package com.weyee.sdk.print.scan.ble;
 
 import android.bluetooth.BluetoothDevice;
 
@@ -12,22 +12,7 @@ import java.util.Set;
  */
 public interface IBluetoothAble {
 
-    //Action
-    String ACTION_DISCONNECTED = "com.weyee.sdk.print.manager.ble.ACTION_DISCONNECTED";
-    String ACTION_CONNECTING = "com.weyee.sdk.print.manager.ble.ACTION_CONNECTING";
-    String ACTION_CONNECTED = "com.weyee.sdk.print.manager.ble.ACTION_CONNECTED";
-    String ACTION_DISCONNECTING = "com.weyee.sdk.print.manager.ble.ACTION_DISCONNECTING";
-    String ACTION_SERVICES_DISCOVERED = "com.weyee.sdk.print.manager.ble.ACTION_SERVICES_DISCOVERED";
-    String ACTION_BLUETOOTH_DEVICE = "com.weyee.sdk.print.manager.ble.ACTION_BLUETOOTH_DEVICE";
-    String ACTION_SCAN_FINISHED = "com.weyee.sdk.print.manager.ble.ACTION_SCAN_FINISHED";
-
     int SCAN = 1;
-    int CONNECT = 2;
-    int READ = 3;
-    int WRITE = 4;
-
-    int STATE_WRITE_COMPLETED = 101;
-    int STATE_READ_COMPLETED = 102;
 
     boolean initialize();
 
@@ -82,23 +67,6 @@ public interface IBluetoothAble {
      */
     boolean isScanning();
 
-    /**
-     * 连接
-     */
-    boolean connect(String address);
-
-    void write(byte[] bytes);
-
-    /**
-     * 断开连接
-     */
-    void disconnect();
-
-    /**
-     * 关闭连接通道
-     */
-    void close();
-
     void destroy();
 
 
@@ -108,11 +76,4 @@ public interface IBluetoothAble {
      * @return
      */
     Set<BluetoothDevice> getBondedDevices();
-
-    /**
-     * 获取扫描到的蓝牙列表（包括已配对的）
-     *
-     * @return
-     */
-    Set<BluetoothDevice> getScanDevices();
 }

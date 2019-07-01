@@ -1,4 +1,4 @@
-package com.weyee.sdk.print.manager.ble;
+package com.weyee.sdk.print.scan.ble;
 
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothDevice;
@@ -12,8 +12,8 @@ import androidx.annotation.NonNull;
 import com.blankj.utilcode.util.ServiceUtils;
 import com.weyee.sdk.print.constant.Brand;
 import com.weyee.sdk.print.constant.DeviceCode;
-import com.weyee.sdk.print.manager.ble.classicBle.BluetoothClassicService;
-import com.weyee.sdk.print.manager.ble.leBle.BluetoothLeService;
+import com.weyee.sdk.print.scan.ble.classicBle.BluetoothClassicService;
+import com.weyee.sdk.print.scan.ble.leBle.BluetoothLeService;
 import com.weyee.sdk.toast.ToastUtils;
 
 import java.util.Collections;
@@ -65,7 +65,7 @@ public class BluetoothUtils {
      * 绑定服务
      */
     public void bindService() {
-        ServiceUtils.bindService(BluetoothClassicService.class, serviceConnection, Context.BIND_AUTO_CREATE);
+        ServiceUtils.bindService(BluetoothLeService.class, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     /**
@@ -93,32 +93,6 @@ public class BluetoothUtils {
     public void cancelDiscovery() {
         if (iBluetoothAble != null) {
             iBluetoothAble.cancelDiscovery();
-        }
-    }
-
-    /**
-     * 连接设备
-     *
-     * @param address
-     */
-    public void connect(String address) {
-        if (iBluetoothAble != null) {
-            iBluetoothAble.connect(address);
-        }
-    }
-
-    /**
-     * 断开设备
-     */
-    public void disconnect() {
-        if (iBluetoothAble != null) {
-            iBluetoothAble.disconnect();
-        }
-    }
-
-    public void write(byte[] bytes) {
-        if (iBluetoothAble != null) {
-            iBluetoothAble.write(bytes);
         }
     }
 
@@ -169,6 +143,11 @@ public class BluetoothUtils {
                 @Override
                 public void onScanStateChange(boolean isScanning) {
                     if (listener != null) listener.onScanStateChange(isScanning);
+                }
+
+                @Override
+                public void onBondStateChange(BluetoothDevice device, int newState) {
+                    if (listener != null) listener.onBondStateChange(device, newState);
                 }
 
                 @Override

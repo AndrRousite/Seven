@@ -7,19 +7,10 @@ import com.weyee.sdk.print.constant.DeviceCode;
  *
  * @author wuqi by 2019-06-14.
  */
-public class GprinterDevice extends BasePrinterDevice {
+public class GprinterDevice extends BaseDevice {
 
-    public GprinterDevice(int printType) {
-        // 佳博打印机支持蓝牙和USB打印
-        super(DeviceCode.DEVICE_GPRINTER, printType);
+    public GprinterDevice() {
+        super(DeviceCode.DEVICE_GPRINTER);
     }
 
-    private GprinterDevice(int deviceCode, int printType) {
-        super(deviceCode, printType);
-    }
-
-    @Override
-    public void otherPrint() {
-
-    }
 }
