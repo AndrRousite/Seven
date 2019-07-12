@@ -12,10 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.os.Binder;
-import android.os.Build;
-import android.os.Handler;
-import android.os.IBinder;
+import android.os.*;
 import androidx.annotation.Nullable;
 import com.blankj.utilcode.util.LogUtils;
 import com.weyee.sdk.print.scan.ble.IBluetoothAble;
@@ -39,6 +36,26 @@ public class BluetoothLeService extends Service implements IBluetoothAble {
 
     private IBluetoothListener bluetoothLeListener;
     private BluetoothReceiver bluetoothReceiver;
+
+    @SuppressLint("HandlerLeak")
+    private final Handler mHandler = new Handler() {
+        @SuppressLint("MissingPermission")
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == SCAN) {
+                if (msg.obj == null) {
+                    changeScanState(false);
+                    if (mBluetoothAdapter != null) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mBluetoothAdapter.getBluetoothLeScanner() != null) {
+                            mBluetoothAdapter.getBluetoothLeScanner().stopScan(mScanCallback);
+                        } else {
+                            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                        }
+                    }
+                }
+            }
+        }
+    };
 
 
     @Override
@@ -109,14 +126,7 @@ public class BluetoothLeService extends Service implements IBluetoothAble {
         if (isEnableBluetooth()) {
             if (isScanning()) return;
             //Stop scanning after a predefined scan period.
-            new Handler().postDelayed(() -> {
-                changeScanState(false);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mBluetoothAdapter.getBluetoothLeScanner().stopScan(mScanCallback);
-                } else {
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                }
-            }, scanPeriod);
+            mHandler.sendEmptyMessageDelayed(SCAN, scanPeriod);
             mScanLeDeviceList.clear();
             changeScanState(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -132,13 +142,8 @@ public class BluetoothLeService extends Service implements IBluetoothAble {
     @SuppressLint("MissingPermission")
     @Override
     public void cancelDiscovery() {
-        if (mBluetoothAdapter != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mBluetoothAdapter.getBluetoothLeScanner() != null) {
-                mBluetoothAdapter.getBluetoothLeScanner().stopScan(mScanCallback);
-            } else {
-                mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            }
-        }
+        mHandler.removeMessages(SCAN);
+        mHandler.obtainMessage(SCAN, -1, -1, null).sendToTarget();
         mScanLeDeviceList.clear();
     }
 
@@ -166,6 +171,7 @@ public class BluetoothLeService extends Service implements IBluetoothAble {
             Tools.getApp().unregisterReceiver(bluetoothReceiver);
             bluetoothReceiver = null;
         }
+        mHandler.removeCallbacksAndMessages(null);
     }
 
     @SuppressLint("MissingPermission")

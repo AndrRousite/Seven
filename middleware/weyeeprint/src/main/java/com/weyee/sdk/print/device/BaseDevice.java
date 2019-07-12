@@ -6,10 +6,7 @@ import com.weyee.sdk.print.Interface.IConnectAble;
 import com.weyee.sdk.print.Interface.IExternalAble;
 import com.weyee.sdk.print.Interface.IPrintAble;
 import com.weyee.sdk.print.constant.PrintType;
-import com.weyee.sdk.print.device.external.BlePrintManager;
-import com.weyee.sdk.print.device.external.SataPrintManager;
-import com.weyee.sdk.print.device.external.UsbPrintManager;
-import com.weyee.sdk.print.device.external.WifiPrintManager;
+import com.weyee.sdk.print.device.external.*;
 import com.weyee.sdk.print.listener.PrintConnectListener;
 import com.weyee.sdk.util.number.MNumberUtil;
 
@@ -86,7 +83,7 @@ public abstract class BaseDevice implements IPrintAble, IConnectAble {
         if (able == null) {
             switch (printType) {
                 case PrintType.BLE:
-                    iExternalAble = new BlePrintManager();
+                    iExternalAble = new GattPrintManager();
                     break;
                 case PrintType.USB:
                     iExternalAble = new UsbPrintManager();

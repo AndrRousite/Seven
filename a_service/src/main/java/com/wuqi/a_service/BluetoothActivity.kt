@@ -338,6 +338,7 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
     }
 
     private fun printLines(address: String) {
+        bluetoothUtils?.cancelDiscovery()
         PrintManager.getInstance().connect(address, object : PrintConnectListener {
             override fun onStart() {
                 //Ble正在连接

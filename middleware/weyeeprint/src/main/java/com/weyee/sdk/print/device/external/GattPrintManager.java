@@ -11,8 +11,8 @@ import com.weyee.sdk.util.Tools;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Queue;
-import java.util.UUID;
 
 /**
  * le蓝牙ESC打印
@@ -20,8 +20,10 @@ import java.util.UUID;
  * @author wuqi by 2019-06-14.
  */
 public class GattPrintManager extends BasePrintManager {
-    private static final String UUID_SERVICE_DEVICE = "00001800-0000-1000-8000-00805F9B34FB"; // 进行通信的服务UUID
-    private static final String UUID_CHARACTERISTIC_DEVICE = "00002A00-0000-1000-8000-00805F9B34FB";  //进行通信的CharacteristicUUID
+    //private static final String UUID_SERVICE_DEVICE = "00001800-0000-1000-8000-00805f9b34fb"; // 进行通信的服务UUID
+    private static final String UUID_SERVICE_DEVICE = "0000fff0-0000-1000-8000-00805f9b34fb"; // 进行通信的服务UUID
+    //private static final String UUID_CHARACTERISTIC_DEVICE = "00002a00-0000-1000-8000-00805f9b34fb";  //进行通信的CharacteristicUUID
+    private static final String UUID_CHARACTERISTIC_DEVICE = "0000fff2-0000-1000-8000-00805f9b34fb";  //进行通信的CharacteristicUUID
 
     private BluetoothAdapter bluetoothAdapter = null;
     private BluetoothGatt mBluetoothGatt;
@@ -76,7 +78,7 @@ public class GattPrintManager extends BasePrintManager {
 
     @Override
     public int splitLength() {
-        return super.splitLength();
+        return 1024;
     }
 
     /**
@@ -108,10 +110,10 @@ public class GattPrintManager extends BasePrintManager {
             //We want to directly connect to the device, so we are setting the autoConnect
             // parameter to false.
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mBluetoothGatt = device.connectGatt(null, true, new QQBluetoothGattCallback(), BluetoothDevice.TRANSPORT_LE);
+                mBluetoothGatt = device.connectGatt(Tools.getApp(), false, new QQBluetoothGattCallback(), BluetoothDevice.TRANSPORT_LE);
             } else {
 
-                mBluetoothGatt = device.connectGatt(null, true, new QQBluetoothGattCallback());
+                mBluetoothGatt = device.connectGatt(Tools.getApp(), false, new QQBluetoothGattCallback());
             }
         }
     }
@@ -136,31 +138,46 @@ public class GattPrintManager extends BasePrintManager {
 
             mHandler.obtainMessage(ConnectStatus.STATE_WRITE_BEGIN, -1, -1, null).sendToTarget();
 
-            //获取指定uuid的service
-            BluetoothGattService gattService = mBluetoothGatt.getService(UUID.fromString(UUID_SERVICE_DEVICE));
-            //获取到特定的服务不为空
-            if (gattService != null) {
-                //获取指定uuid的Characteristic
-                BluetoothGattCharacteristic gattCharacteristic = gattService.getCharacteristic(UUID.fromString(UUID_CHARACTERISTIC_DEVICE));
-                //获取特定特征成功
-                if (gattCharacteristic != null) {
-                    // 每次发送20个字节
-                    Queue<byte[]> queue = Utils.splitByte(bytes, splitLength());
-                    while (!queue.isEmpty()) {
-                        //写入你需要传递给外设的特征值（即传递给外设的信息）
-                        gattCharacteristic.setValue(queue.poll());
-                        //通过GATt实体类将，特征值写入到外设中。
-                        mBluetoothGatt.writeCharacteristic(gattCharacteristic);
+            List<BluetoothGattService> gattServices = mBluetoothGatt.getServices();
 
-                        //如果只是需要读取外设的特征值：
-                        //通过Gatt对象读取特定特征（Characteristic）的特征值
+            for (BluetoothGattService gattService : gattServices) {
+                List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
+
+                for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
+                    final int charaProp = gattCharacteristic.getProperties();
+                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
+                        // 写入数据
+                        //获取特定特征成功
+
+                        // 每次发送20个字节
+                        Queue<byte[]> queue = Utils.splitByte(bytes, splitLength());
+                        while (!queue.isEmpty()) {
+                            //写入你需要传递给外设的特征值（即传递给外设的信息）
+                            gattCharacteristic.setValue(queue.poll());
+                            //通过GATt实体类将，特征值写入到外设中。
+                            mBluetoothGatt.writeCharacteristic(gattCharacteristic);
+
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        mHandler.obtainMessage(ConnectStatus.STATE_WRITE_SUCCESS, -1, -1, null).sendToTarget();
+                        return;
+                    }
+                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                        // 发送通知
+                        mBluetoothGatt.setCharacteristicNotification(gattCharacteristic, true);
+                        continue;
+                    }
+                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                        // 通过Gatt对象读取特定特征（Characteristic）的特征值
                         mBluetoothGatt.readCharacteristic(gattCharacteristic);
                     }
-
-                    mHandler.obtainMessage(ConnectStatus.STATE_WRITE_SUCCESS, -1, -1, null).sendToTarget();
-                    return;
                 }
             }
+
             //获取特定服务失败
             mHandler.obtainMessage(ConnectStatus.STATE_WRITE_FAILURE, -1, -1, null).sendToTarget();
         }
@@ -205,7 +222,7 @@ public class GattPrintManager extends BasePrintManager {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 //获取读取到的特征值
                 byte[] value = characteristic.getValue();
-                LogUtils.d(new String(value));
+                LogUtils.d(String.format("%s->%s", "onCharacteristicRead", new String(value)));
             }
         }
 
@@ -216,7 +233,7 @@ public class GattPrintManager extends BasePrintManager {
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 //获取写入到外设的特征值
                 byte[] value = characteristic.getValue();
-                LogUtils.d(new String(value));
+                LogUtils.d(String.format("%s->%s", "onCharacteristicWrite", new String(value)));
             }
         }
 
@@ -227,7 +244,7 @@ public class GattPrintManager extends BasePrintManager {
             //获取外设修改的特征值
             byte[] value = characteristic.getValue();
             //对特征值进行解析
-            LogUtils.d(new String(value));
+            LogUtils.d(String.format("%s->%s", "onCharacteristicChanged", new String(value)));
         }
 
         //描述写入回调
