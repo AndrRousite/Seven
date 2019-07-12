@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.bluetooth.BluetoothDevice
 import android.graphics.Color
+import android.hardware.usb.UsbDevice
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
@@ -23,6 +24,7 @@ import com.weyee.poswidget.layout.QMUIButton
 import com.weyee.poswidget.stateview.state.ContentState
 import com.weyee.sdk.api.rxutil.RxJavaUtils
 import com.weyee.sdk.dialog.ChooseDialog
+import com.weyee.sdk.dialog.MessageDialog
 import com.weyee.sdk.multitype.BaseAdapter
 import com.weyee.sdk.multitype.BaseHolder
 import com.weyee.sdk.multitype.FlexibleDividerDecoration
@@ -30,11 +32,12 @@ import com.weyee.sdk.multitype.HorizontalDividerItemDecoration
 import com.weyee.sdk.permission.PermissionIntents
 import com.weyee.sdk.print.PrintManager
 import com.weyee.sdk.print.constant.ConnectStatus
-import com.weyee.sdk.print.constant.DeviceCode
 import com.weyee.sdk.print.constant.PaperSize
 import com.weyee.sdk.print.listener.PrintConnectListener
 import com.weyee.sdk.print.scan.ble.BluetoothUtils
 import com.weyee.sdk.print.scan.ble.IBluetoothListener
+import com.weyee.sdk.print.scan.usb.IUsbListener
+import com.weyee.sdk.print.scan.usb.UsbUtils
 import com.weyee.sdk.router.Path
 import com.weyee.sdk.toast.ToastUtils
 import com.weyee.sdk.util.number.MNumberUtil
@@ -50,6 +53,11 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
 
     private lateinit var adapter: BaseAdapter<Any>
     private var bluetoothUtils: BluetoothUtils? = null
+    private var usbUtils: UsbUtils? = null
+
+    companion object {
+        const val USB = "Serial Port"
+    }
 
     override fun setupActivityComponent(appComponent: AppComponent?) {
     }
@@ -58,7 +66,7 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
 
     @SuppressLint("RtlHardcoded")
     override fun initView(savedInstanceState: Bundle?) {
-        headerView.setTitle("蓝牙打印", Gravity.LEFT or Gravity.CENTER_VERTICAL)
+        headerView.setTitle("打印设备", Gravity.LEFT or Gravity.CENTER_VERTICAL)
 
         headerView.isShowMenuRightOneView(true)
         headerView.setMenuRightOneIcon(R.drawable.ic_settings_black_24dp)
@@ -81,6 +89,9 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
             dialog.setOnItemClickListener { model ->
                 run {
                     PaperSize.savePaperSize(MNumberUtil.convertToint(model.title.replace("mm", "")))
+                    bluetoothUtils?.unBindService()
+                    usbUtils?.unBindService()
+                    initData(null)
                 }
             }
 
@@ -106,36 +117,46 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
         adapter = object : BaseAdapter<Any>(null, { _, _, data, _ ->
             if (data is BluetoothDevice && data.bondState != BluetoothDevice.BOND_BONDED) {
                 printLines(data.address)
+            } else if (data is UsbDevice) {
+                ToastUtils.show("这是一台USB设备")
             }
         }) {
             override fun getHolder(v: View, viewType: Int): BaseHolder<Any> {
                 return object : BaseHolder<Any>(v) {
                     @SuppressLint("MissingPermission")
                     override fun setData(data: Any, position: Int) {
-                        if (data is BluetoothDevice) {
-                            setText(R.id.tvName, data.name)
-                            setText(R.id.tvAddress, data.address)
-                            setVisible(
-                                R.id.tvPrint,
-                                if (data.bondState == BluetoothDevice.BOND_BONDED) View.VISIBLE else View.GONE
-                            )
-                            setText(R.id.tvPrint, "打印")
-                            setOnClickListener(R.id.tvPrint) {
-                                printLines(data.address)
+                        when (data) {
+                            is BluetoothDevice -> {
+                                setText(R.id.tvName, data.name)
+                                setText(R.id.tvAddress, data.address)
+                                setVisible(
+                                    R.id.tvPrint,
+                                    if (data.bondState == BluetoothDevice.BOND_BONDED) View.VISIBLE else View.GONE
+                                )
+                                setText(R.id.tvPrint, "打印")
+                                setOnClickListener(R.id.tvPrint) {
+                                    printLines(data.address)
+                                }
                             }
-                        } else {
-                            if ("未配对设备(点击名称进行配对)" == data) {
-                                setVisible(R.id.tvSearch, View.VISIBLE)
-                                setText(R.id.tvSearch, "搜索")
-                                val qmuiButton = getView<QMUIButton>(R.id.tvSearch)
-                                qmuiButton.setBorderColor(resources.getColor(if (bluetoothUtils?.isScanning == true) R.color.cl_666666 else R.color.cl_50a7ff))
-                                qmuiButton.setTextColor(resources.getColor(if (bluetoothUtils?.isScanning == true) R.color.cl_666666 else R.color.cl_50a7ff))
-                            } else {
-                                setVisible(R.id.tvSearch, View.GONE)
+                            is UsbDevice -> {
+                                setText(R.id.tvName, data.deviceName)
+                                setText(R.id.tvAddress, "${data.productId}+${data.vendorId}")
+                                setVisible(R.id.tvPrint, View.GONE)
                             }
-                            setText(R.id.tvTitle, data as String?)
-                            setOnClickListener(R.id.tvSearch) {
-                                bluetoothUtils?.startDiscovery()
+                            else -> {
+                                if ("未配对设备(点击名称进行配对)" == data) {
+                                    setVisible(R.id.tvSearch, View.VISIBLE)
+                                    setText(R.id.tvSearch, "搜索")
+                                    val qmuiButton = getView<QMUIButton>(R.id.tvSearch)
+                                    qmuiButton.setBorderColor(resources.getColor(if (bluetoothUtils?.isScanning == true) R.color.cl_666666 else R.color.cl_50a7ff))
+                                    qmuiButton.setTextColor(resources.getColor(if (bluetoothUtils?.isScanning == true) R.color.cl_666666 else R.color.cl_50a7ff))
+                                } else {
+                                    setVisible(R.id.tvSearch, View.GONE)
+                                }
+                                setText(R.id.tvTitle, data as String?)
+                                setOnClickListener(R.id.tvSearch) {
+                                    bluetoothUtils?.startDiscovery()
+                                }
                             }
                         }
                     }
@@ -144,12 +165,27 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
             }
 
             override fun getItemViewType(position: Int): Int {
-                return if (getItem(position) is BluetoothDevice) 1 else super.getItemViewType(position)
+                return if (getItem(position) is BluetoothDevice || getItem(position) is UsbDevice) 1 else super.getItemViewType(
+                    position
+                )
             }
 
             override fun getLayoutId(viewType: Int): Int =
                 if (viewType == 0) R.layout.item_bluetooth_title else R.layout.item_bluetooth
 
+        }
+
+        adapter.setmOnItemLongClickListener { _, _, data, _ ->
+            run {
+                if (data is BluetoothDevice && data.bondState == BluetoothDevice.BOND_BONDED) {
+                    val dialog = MessageDialog(context)
+                    dialog.setMsg("是否解绑当前设备？")
+                    dialog.setOnClickConfirmListener {
+                        bluetoothUtils?.unpairDevice(data)
+                    }
+                    dialog.show()
+                }
+            }
         }
 
         recyclerView.adapter = adapter
@@ -200,13 +236,14 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
      * 开始蓝牙扫描的服务
      */
     private fun bindService() {
-        bluetoothUtils = BluetoothUtils(DeviceCode.getDeviceCode(), object : IBluetoothListener {
+        val currentPaperSize = PaperSize.getPaperSize()
+        bluetoothUtils = BluetoothUtils(currentPaperSize, object : IBluetoothListener {
             override fun onLeScan(device: BluetoothDevice?, rssi: Int, scanRecord: ByteArray?) {
-                adapter.add(adapter.all.size - 1, device)
+                adapter.add(adapter.all.indexOf(USB) - 1, device)
             }
 
             override fun onClassicScan(device: BluetoothDevice?) {
-                adapter.add(adapter.all.size - 1, device)
+                adapter.add(adapter.all.indexOf(USB) - 1, device)
             }
 
             override fun onScanStateChange(isScanning: Boolean) {
@@ -219,7 +256,7 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
                         }
                     }, true)
                 }
-                adapter.modify(adapter.itemCount - 1, if (isScanning) "正在搜索可配对设备..." else "搜索完毕")
+                adapter.modify(adapter.all.indexOf(USB) - 1, if (isScanning) "正在搜索可配对设备..." else "搜索完毕")
                 adapter.notifyDataSetChanged()
             }
 
@@ -247,8 +284,9 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
                 }
             }
         })
+        adapter.clearAll()
         adapter.add("已配对设备")
-        RxJavaUtils.delay(200, TimeUnit.MILLISECONDS)
+        RxJavaUtils.delay(500, TimeUnit.MILLISECONDS)
             .`as`(RxLiftUtils.bindLifecycle(this))
             .subscribe {
                 adapter.addAll(1, bluetoothUtils?.bondedDevices?.toList())
@@ -256,11 +294,43 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
         adapter.add("未配对设备(点击名称进行配对)")
         adapter.add("正在搜索可配对设备...")
         bluetoothUtils?.bindService()
+
+        adapter.add(USB)
+
+        usbUtils = UsbUtils(currentPaperSize, IUsbListener {
+            adapter.run {
+                removeAll(adapter.all.filter {
+                    it !is UsbDevice && it != "无可用的串口设备"
+                })
+
+                if (it.isEmpty()) {
+                    add("无可用的串口设备")
+                } else {
+                    addAll(it.toList())
+                }
+            }
+        })
+
+        RxJavaUtils.delay(500, TimeUnit.MILLISECONDS)
+            .`as`(RxLiftUtils.bindLifecycle(this))
+            .subscribe {
+                val list = usbUtils?.usbDevices?.toList()
+
+                if (list?.size ?: 0 > 0) {
+                    adapter.remove(adapter.all.size - 1, null)
+                    adapter.addAll(list)
+                }
+            }
+
+        adapter.add("无可用的串口设备")
+
+        usbUtils?.bindService()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         bluetoothUtils?.unBindService()
+        usbUtils?.unBindService()
     }
 
     override fun useProgressAble(): Boolean {

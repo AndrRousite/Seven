@@ -147,9 +147,17 @@ public abstract class BaseAdapter<T> extends android.widget.BaseAdapter implemen
     }
 
     @Override
-    public void remove(int index) {
+    public void remove(int index, @Nullable Object object) {
         if (index < 0 || index >= mList.size()) return;
         mList.remove(index);
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void removeAll(@Nullable List<T> list) {
+        if (list != null && mList.containsAll(list)) {
+            mList.removeAll(list);
+            notifyDataSetChanged();
+        }
     }
 }

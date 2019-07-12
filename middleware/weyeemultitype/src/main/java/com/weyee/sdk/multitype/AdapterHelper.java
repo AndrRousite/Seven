@@ -35,6 +35,8 @@ public interface AdapterHelper<T> {
 
     void remove(@Nullable T data);
 
-    void remove(int index);
+    void remove(int index, @Nullable Object object);
+
+    void removeAll(@Nullable List<T> list);
 }
 

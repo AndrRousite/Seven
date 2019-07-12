@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.weyee.sdk.print">
+
+    <!--支持USB串口通信-->
+    <uses-feature android:name="android.hardware.usb.host"/>
+
     <application>
         <service android:name=".scan.ble.leBle.BluetoothLeService" android:enabled="true"/>
         <service android:name=".scan.ble.classicBle.BluetoothClassicService" android:enabled="true"/>
+        <service android:name=".scan.usb.UsbService" android:enabled="true"/>
     </application>
 </manifest>

@@ -47,6 +47,10 @@ public class ChooseDialog extends BaseDialog {
             ChooseItemModel model = adapter.getItem(position);
             if (model != null) {
                 if (!isMultiple) {
+                    // 去除重复点击
+                    if (model.choose) {
+                        return;
+                    }
                     for (ChooseItemModel itemModel : adapter.getList()) {
                         if (itemModel == model) {
                             itemModel.choose = true;

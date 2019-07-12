@@ -36,6 +36,7 @@ import java.util.List;
 public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>> implements AdapterHelper<T> {
     private List<T> mList;
     private OnRecyclerViewItemClickListener<T> mOnItemClickListener = null;
+    private OnRecyclerViewItemLongClickListener<T> mOnItemLongClickListener = null;
 
     public BaseAdapter(@Nullable List<T> infos) {
         super();
@@ -85,6 +86,13 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
                 mOnItemClickListener.onItemClick(view, viewType, getItem(position), position);
             }
         });
+        mHolder.itemView.setOnLongClickListener(v -> {
+            if (mOnItemLongClickListener != null && mList.size() > 0) {
+                int position = mHolder.getAdapterPosition();
+                mOnItemLongClickListener.onItemLongClick(view, viewType, getItem(position), position);
+            }
+            return true; // true代表消费了事件，不继续传递了
+        });
         return mHolder;
     }
 
@@ -117,6 +125,10 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
      */
     public T getItem(int position) {
         return mList == null ? null : (position >= mList.size() || position < 0 ? null : mList.get(position));
+    }
+
+    public void setmOnItemLongClickListener(OnRecyclerViewItemLongClickListener<T> mOnItemLongClickListener) {
+        this.mOnItemLongClickListener = mOnItemLongClickListener;
     }
 
     /**
@@ -222,13 +234,22 @@ public abstract class BaseAdapter<T> extends RecyclerView.Adapter<BaseHolder<T>>
     @Override
     public void remove(@Nullable T data) {
         if (data == null) return;
-        remove(mList.indexOf(data));
+        remove(mList.indexOf(data), null);
     }
 
     @Override
-    public void remove(int index) {
+    public void remove(int index, @Nullable Object object) {
+        if (object != null) throw new IllegalArgumentException("参数错误"); // 同上
         if (index < 0 || index >= mList.size()) return;
         mList.remove(index);
         notifyItemRemoved(index);
+    }
+
+    @Override
+    public void removeAll(@Nullable List<T> list) {
+        if (list != null && mList.containsAll(list)) {
+            mList.removeAll(list);
+            notifyDataSetChanged();
+        }
     }
 }

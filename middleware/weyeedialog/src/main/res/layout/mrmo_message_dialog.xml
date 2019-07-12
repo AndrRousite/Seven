@@ -1,17 +1,17 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="270dp"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:background="#ffffff"
-              android:orientation="vertical"
-              android:padding="15dp">
+<com.weyee.sdk.util.roundlayout.RoundLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                  xmlns:tools="http://schemas.android.com/tools"
+                                                  android:layout_width="270dp"
+                                                  android:layout_height="wrap_content"
+                                                  android:background="#ffffff"
+                                                  android:orientation="vertical"
+                                                  android:layout_gravity="center"
+                                                  android:padding="15dp">
 
     <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top|left"
+            android:gravity="center_vertical|left"
             android:minLines="2"
             android:textColor="#454953"
             android:textSize="15sp"
@@ -32,7 +32,8 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:paddingLeft="8dp"
-                android:text="确认"
+                android:text="确定"
+                android:textSize="15sp"
                 android:textColor="#50A7FF"/>
 
         <TextView
@@ -46,7 +47,9 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:text="取消"
+                android:textSize="15sp"
                 android:textColor="#999999"/>
 
     </RelativeLayout>
-</LinearLayout>
+
+</com.weyee.sdk.util.roundlayout.RoundLinearLayout>

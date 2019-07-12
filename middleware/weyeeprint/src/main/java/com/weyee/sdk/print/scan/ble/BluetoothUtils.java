@@ -11,11 +11,12 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import com.blankj.utilcode.util.ServiceUtils;
 import com.weyee.sdk.print.constant.Brand;
-import com.weyee.sdk.print.constant.DeviceCode;
+import com.weyee.sdk.print.constant.PaperSize;
 import com.weyee.sdk.print.scan.ble.classicBle.BluetoothClassicService;
 import com.weyee.sdk.print.scan.ble.leBle.BluetoothLeService;
 import com.weyee.sdk.toast.ToastUtils;
 
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,7 +29,7 @@ import java.util.Set;
  */
 public class BluetoothUtils {
     private IBluetoothAble iBluetoothAble;
-    private int currentDeviceCode;
+    private int currentPaperSize;
     private IBluetoothListener listener;
 
     private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -56,8 +57,8 @@ public class BluetoothUtils {
         }
     };
 
-    public BluetoothUtils(int currentDeviceCode, IBluetoothListener listener) {
-        this.currentDeviceCode = currentDeviceCode;
+    public BluetoothUtils(int currentPaperSize, IBluetoothListener listener) {
+        this.currentPaperSize = currentPaperSize;
         this.listener = listener;
     }
 
@@ -93,6 +94,20 @@ public class BluetoothUtils {
     public void cancelDiscovery() {
         if (iBluetoothAble != null) {
             iBluetoothAble.cancelDiscovery();
+        }
+    }
+
+    /**
+     * 蓝牙取消配对
+     *
+     * @param device
+     */
+    public void unpairDevice(BluetoothDevice device) {
+        try {
+            Method m = device.getClass().getMethod("removeBond", (Class[]) null);
+            m.invoke(device, (Object[]) null);
+        } catch (Exception ignore) {
+
         }
     }
 
@@ -169,20 +184,19 @@ public class BluetoothUtils {
     private boolean filterDevice(@NonNull BluetoothDevice device) {
         @SuppressLint("MissingPermission") String deviceName = device.getName();
         if (TextUtils.isEmpty(deviceName)) return false;
-        switch (currentDeviceCode) {
-            case DeviceCode.DEVICE_QS:
-            case DeviceCode.DEVICE_GPRINTER:
+        switch (currentPaperSize) {
+            case PaperSize.PAPER_SIZE_58:
+                return false;
+            case PaperSize.PAPER_SIZE_80:
                 return deviceName.toUpperCase().contains(Brand.QS_MODEL.toUpperCase()) || deviceName.toUpperCase().contains(Brand.GPRINTER_MODEL.toUpperCase());
-            case DeviceCode.DEVICE_JOLIMARK:
+            case PaperSize.PAPER_SIZE_110:
+                return deviceName.toUpperCase().contains(Brand.ZONERICH_AB_341M_MODEL.toUpperCase()) || deviceName.toUpperCase().contains(Brand.CS4_MODEL.toUpperCase());
+            case PaperSize.PAPER_SIZE_150:
                 return deviceName.toUpperCase().contains(Brand.JOLIMARK_MODEL.toUpperCase())
                         || deviceName.toUpperCase().contains(Brand.JOLIMARK_LQ_200KIII_MODEL.toUpperCase())
                         || deviceName.toUpperCase().contains(Brand.JOLIMARK_LQ_200KIII_MODEL_OTHER.toUpperCase())
                         || deviceName.toUpperCase().contains(Brand.JOLIMARK_LQ_200KIII_MODEL_NEW.toUpperCase());
-            case DeviceCode.DEVICE_CS:
-            case DeviceCode.DEVICE_ZONERICH:
-                return deviceName.toUpperCase().contains(Brand.ZONERICH_AB_341M_MODEL.toUpperCase()) || deviceName.toUpperCase().contains(Brand.CS4_MODEL.toUpperCase());
-            case DeviceCode.DEVICE_EPSON:
-            case DeviceCode.DEVICE_DS:
+            case PaperSize.PAPER_SIZE_210:
                 return deviceName.toUpperCase().contains(Brand.EPSON_MODEL.toUpperCase()) || deviceName.toUpperCase().contains(Brand.EPSON_MODEL_NEW.toUpperCase()) || deviceName.toUpperCase().startsWith(Brand.DS_MODEL.toUpperCase());
             default:
                 return deviceName.toUpperCase().contains(Brand.QS_MODEL.toUpperCase()) || deviceName.toUpperCase().contains(Brand.GPRINTER_MODEL.toUpperCase())
