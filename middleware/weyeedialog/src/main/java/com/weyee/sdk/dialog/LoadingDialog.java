@@ -19,12 +19,14 @@
 package com.weyee.sdk.dialog;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.palette.graphics.Palette;
 
 /**
  * 很友好的加载弹窗
@@ -38,8 +40,8 @@ public class LoadingDialog extends BaseDialog {
     public LoadingDialog(@NonNull Context context, String tips) {
         super(context, R.style.QMUI_LoadingDialog);
         this.tips = tips;
-        setCancelable(false);
-        setCanceledOnTouchOutside(false);
+        //setCancelable(false);
+        //setCanceledOnTouchOutside(false);
     }
 
     @Override
@@ -47,8 +49,29 @@ public class LoadingDialog extends BaseDialog {
         super.onCreate(savedInstanceState);
         View inflate = LayoutInflater.from(getContext()).inflate(R.layout.mrmo_loading_dialog, null);
         setContentView(inflate);
+        setViewLocation();
         tvTips = inflate.findViewById(R.id.tvTips);
         tvTips.setText(tips);
+        Palette.from(BitmapFactory.decodeResource(getContext().getResources(), R.drawable.mrmo_icon_loading))
+                .generate(palette -> {
+                    if (palette != null) {
+                        Palette.Swatch swatch = palette.getMutedSwatch();
+                        if (swatch == null){
+                            swatch = palette.getVibrantSwatch();
+                        }
+                        if (tvTips != null && swatch != null) {
+                            tvTips.setTextColor(swatch.getRgb());
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 设置该dialog总是显示在最顶层(需要悬浮窗权限，且国产ROM需要适配)
+     */
+    protected void setViewLocation() {
+        //Window window = this.getWindow();
+        //Objects.requireNonNull(window).setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
     }
 
     @Override

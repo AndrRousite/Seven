@@ -310,6 +310,10 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
         return !super.useEventBus()
     }
 
+    override fun useProgressAble(): Boolean {
+        return !super.useProgressAble()
+    }
+
     /**
      * 提供AppComponent(提供所有的单例对象)给实现类，进行Component依赖
      *

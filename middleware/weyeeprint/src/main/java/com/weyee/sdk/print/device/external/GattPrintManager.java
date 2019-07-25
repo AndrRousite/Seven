@@ -11,6 +11,7 @@ import com.weyee.sdk.util.Tools;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
@@ -78,7 +79,7 @@ public class GattPrintManager extends BasePrintManager {
 
     @Override
     public int splitLength() {
-        return 1024;
+        return 20;
     }
 
     /**
@@ -145,7 +146,7 @@ public class GattPrintManager extends BasePrintManager {
 
                 for (BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
                     final int charaProp = gattCharacteristic.getProperties();
-                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
+                    if ((charaProp & BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
                         // 写入数据
                         //获取特定特征成功
 
@@ -153,33 +154,38 @@ public class GattPrintManager extends BasePrintManager {
                         Queue<byte[]> queue = Utils.splitByte(bytes, splitLength());
                         while (!queue.isEmpty()) {
                             //写入你需要传递给外设的特征值（即传递给外设的信息）
-                            gattCharacteristic.setValue(queue.poll());
+                            byte[] data = queue.poll();
+                            LogUtils.e("byte=" + Arrays.toString(data));
+                            gattCharacteristic.setValue(data);
                             //通过GATt实体类将，特征值写入到外设中。
                             mBluetoothGatt.writeCharacteristic(gattCharacteristic);
-
                             try {
                                 Thread.sleep(20);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
+
                         mHandler.obtainMessage(ConnectStatus.STATE_WRITE_SUCCESS, -1, -1, null).sendToTarget();
+                        disconnect();
                         return;
                     }
-                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+                    if ((charaProp & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
                         // 发送通知
                         mBluetoothGatt.setCharacteristicNotification(gattCharacteristic, true);
                         continue;
                     }
-                    if ((charaProp | BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+                    if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
                         // 通过Gatt对象读取特定特征（Characteristic）的特征值
                         mBluetoothGatt.readCharacteristic(gattCharacteristic);
                     }
                 }
             }
 
+
             //获取特定服务失败
             mHandler.obtainMessage(ConnectStatus.STATE_WRITE_FAILURE, -1, -1, null).sendToTarget();
+            disconnect();
         }
     }
 
@@ -232,8 +238,8 @@ public class GattPrintManager extends BasePrintManager {
             super.onCharacteristicWrite(gatt, characteristic, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 //获取写入到外设的特征值
-                byte[] value = characteristic.getValue();
-                LogUtils.d(String.format("%s->%s", "onCharacteristicWrite", new String(value)));
+                //byte[] value = characteristic.getValue();
+                //LogUtils.d(String.format("%s->%s", "onCharacteristicWrite", new String(value)));
             }
         }
 
@@ -251,6 +257,12 @@ public class GattPrintManager extends BasePrintManager {
         @Override
         public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
             super.onDescriptorWrite(gatt, descriptor, status);
+        }
+
+        @Override
+        public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+            super.onMtuChanged(gatt, mtu, status);
+            LogUtils.d(String.format("%s->%s", "onMtuChanged", String.valueOf(mtu)));
         }
     }
 }

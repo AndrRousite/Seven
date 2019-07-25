@@ -92,7 +92,11 @@ public abstract class BasePrintManager implements IExternalAble {
 
     @Override
     public void disconnect() {
-        mHandler.obtainMessage(ConnectStatus.STATE_DISCONNECTED, -1, -1, null).sendToTarget();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -160,20 +160,24 @@ public class BlePrintManager extends BasePrintManager {
             mHandler.obtainMessage(ConnectStatus.STATE_WRITE_BEGIN, -1, -1, null).sendToTarget();
 
             if (outputStream != null) {
-                // 每次发送20个字节
-                Queue<byte[]> queue = Utils.splitByte(bytes, splitLength());
-                while (!queue.isEmpty()) {
-                    try {
+                try {
+                    // 每次发送20个字节
+                    Queue<byte[]> queue = Utils.splitByte(bytes, splitLength());
+                    while (!queue.isEmpty()) {
                         outputStream.write(queue.poll());
                         outputStream.flush();
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
+                    mHandler.obtainMessage(ConnectStatus.STATE_WRITE_SUCCESS, -1, -1, null).sendToTarget();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    mHandler.obtainMessage(ConnectStatus.STATE_WRITE_FAILURE, -1, -1, null).sendToTarget();
                 }
-                mHandler.obtainMessage(ConnectStatus.STATE_WRITE_SUCCESS, -1, -1, null).sendToTarget();
             } else {
                 mHandler.obtainMessage(ConnectStatus.STATE_WRITE_FAILURE, -1, -1, null).sendToTarget();
             }
+
+            // 最后不管成功失败，断开连接
+            disconnect();
 
         }
     }

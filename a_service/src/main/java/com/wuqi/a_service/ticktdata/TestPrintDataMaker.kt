@@ -23,6 +23,7 @@ class TestPrintDataMaker {
                 else -> null
             }
 
+            printer?.initPrinter()
             printer?.setAlignRight()
             printer?.printText("销售单")
             printer?.printLineFeed()
@@ -58,14 +59,14 @@ class TestPrintDataMaker {
             printer?.printLineFeed()
             printer?.printLine()
 
-            printer?.printLineFeed()
-
-
             printer?.setAlignCenter()
             printer?.printImage(mutableListOf("刘枫9987", null, "这个🐶"), mutableListOf("微信"))
             printer?.printImage(mutableListOf("刘枫9987", "Hello 啊", "https://www.baidu.com"), mutableListOf("微信"))
             printer?.printLineFeed()
             printer?.printText("扫一扫，查看详情")
+            printer?.printLineFeed()
+            printer?.printLineFeed()
+            printer?.printLineFeed()
             printer?.printLineFeed()
             printer?.printLineFeed()
             printer?.printLineFeed()

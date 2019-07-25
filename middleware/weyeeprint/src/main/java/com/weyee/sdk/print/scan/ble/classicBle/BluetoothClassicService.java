@@ -50,7 +50,7 @@ public class BluetoothClassicService extends Service implements IBluetoothAble {
                         case BluetoothDevice.BOND_NONE:
                         case BluetoothDevice.BOND_BONDING:
                             if (bluetoothClassicListener != null) {
-                                bluetoothClassicListener.onConnectionStateChange(bluetoothDevice, -1, msg.arg1);
+                                bluetoothClassicListener.onBondStateChange(bluetoothDevice,  msg.arg1);
                             }
                         default:
                             if (mScanLeDeviceList.contains(bluetoothDevice)) break;

@@ -20,6 +20,11 @@ public interface ITemplateAble {
     void write(byte[] data);
 
     /**
+     * 初始化打印机
+     */
+    void initPrinter();
+
+    /**
      * 设置居中
      */
     void setAlignCenter();

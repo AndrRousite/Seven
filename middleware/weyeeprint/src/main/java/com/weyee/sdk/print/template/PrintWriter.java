@@ -42,7 +42,6 @@ abstract class PrintWriter implements ITemplateAble {
     @Override
     public void init() {
         bos = new ByteArrayOutputStream();
-        write(EscUtils.initPrinter());
     }
 
     @Override
@@ -53,6 +52,11 @@ abstract class PrintWriter implements ITemplateAble {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void initPrinter() {
+        write(EscUtils.initPrinter());
     }
 
     @Override
@@ -224,8 +228,6 @@ abstract class PrintWriter implements ITemplateAble {
             return;
         byte[] data = EscUtils.decodeBitmap(image, getParting());
         image.recycle();
-        // 输出打印中的缓存，并换行
-        printLineFeed();
         write(data);
     }
 
@@ -237,8 +239,6 @@ abstract class PrintWriter implements ITemplateAble {
             return;
         byte[] data = EscUtils.decodeBitmap(bitmap, getParting());
         bitmap.recycle();
-        // 输出打印中的缓存，并换行
-        printLineFeed();
         write(data);
     }
 
@@ -264,8 +264,6 @@ abstract class PrintWriter implements ITemplateAble {
             return;
         byte[] data = EscUtils.decodeBitmap(bitmap, getParting());
         bitmap.recycle();
-        // 输出打印中的缓存，并换行
-        printLineFeed();
         write(data);
     }
 
