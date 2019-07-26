@@ -1,12 +1,13 @@
 package com.weyee.sdk.log;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.orhanobut.logger.LogAdapter;
 import com.orhanobut.logger.Printer;
 
 /**
- * <p>
+ * <p>JakeWharton 大神之作
  *
  * @author wuqi
  * @describe ...
@@ -15,7 +16,11 @@ import com.orhanobut.logger.Printer;
 class Timber implements ILogger {
     @Override
     public void addAdapter(@Nullable LogAdapter adapter) {
-
+        if (Environment.isDebug()) {
+            timber.log.Timber.plant(new timber.log.Timber.DebugTree());
+        } else {
+            timber.log.Timber.plant(new CrashReportingTree());
+        }
     }
 
     @Override
@@ -44,7 +49,7 @@ class Timber implements ILogger {
     }
 
     @Override
-    public void e(@NonNull Throwable throwable,@NonNull String message, Object... args) {
+    public void e(@NonNull Throwable throwable, @NonNull String message, Object... args) {
         timber.log.Timber.e(throwable, message, args);
     }
 
@@ -96,5 +101,25 @@ class Timber implements ILogger {
     @Override
     public void clearLogAdapters() {
 
+    }
+
+    /**
+     * A tree which logs important information for crash reporting.
+     */
+    private static class CrashReportingTree extends timber.log.Timber.Tree {
+        @Override
+        protected void log(int priority, String tag, @NonNull String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG) {
+                return;
+            }
+
+            if (t != null) {
+                if (priority == Log.ERROR) {
+                    // TODO;
+                } else if (priority == Log.WARN) {
+                    // TODO;
+                }
+            }
+        }
     }
 }

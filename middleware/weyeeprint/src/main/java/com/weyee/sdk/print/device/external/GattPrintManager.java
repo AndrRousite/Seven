@@ -14,6 +14,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * le蓝牙ESC打印
@@ -21,13 +22,11 @@ import java.util.Queue;
  * @author wuqi by 2019-06-14.
  */
 public class GattPrintManager extends BasePrintManager {
-    //private static final String UUID_SERVICE_DEVICE = "00001800-0000-1000-8000-00805f9b34fb"; // 进行通信的服务UUID
-    private static final String UUID_SERVICE_DEVICE = "0000fff0-0000-1000-8000-00805f9b34fb"; // 进行通信的服务UUID
-    //private static final String UUID_CHARACTERISTIC_DEVICE = "00002a00-0000-1000-8000-00805f9b34fb";  //进行通信的CharacteristicUUID
-    private static final String UUID_CHARACTERISTIC_DEVICE = "0000fff2-0000-1000-8000-00805f9b34fb";  //进行通信的CharacteristicUUID
 
     private BluetoothAdapter bluetoothAdapter = null;
     private BluetoothGatt mBluetoothGatt;
+    private ReentrantLock lock = new ReentrantLock();
+    private int mtu;
 
     @Override
     public void create() {
@@ -79,7 +78,7 @@ public class GattPrintManager extends BasePrintManager {
 
     @Override
     public int splitLength() {
-        return 20;
+        return Math.max(mtu, 20);
     }
 
     /**
@@ -152,33 +151,34 @@ public class GattPrintManager extends BasePrintManager {
 
                         // 每次发送20个字节
                         Queue<byte[]> queue = Utils.splitByte(bytes, splitLength());
+
                         while (!queue.isEmpty()) {
+                            try {
+                                Thread.sleep(50);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             //写入你需要传递给外设的特征值（即传递给外设的信息）
                             byte[] data = queue.poll();
                             LogUtils.e("byte=" + Arrays.toString(data));
                             gattCharacteristic.setValue(data);
                             //通过GATt实体类将，特征值写入到外设中。
                             mBluetoothGatt.writeCharacteristic(gattCharacteristic);
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
                         }
 
                         mHandler.obtainMessage(ConnectStatus.STATE_WRITE_SUCCESS, -1, -1, null).sendToTarget();
                         disconnect();
                         return;
                     }
-                    if ((charaProp & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
-                        // 发送通知
-                        mBluetoothGatt.setCharacteristicNotification(gattCharacteristic, true);
-                        continue;
-                    }
-                    if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
-                        // 通过Gatt对象读取特定特征（Characteristic）的特征值
-                        mBluetoothGatt.readCharacteristic(gattCharacteristic);
-                    }
+//                    if ((charaProp & BluetoothGattCharacteristic.PROPERTY_NOTIFY) > 0) {
+//                        // 发送通知
+//                        mBluetoothGatt.setCharacteristicNotification(gattCharacteristic, true);
+//                        continue;
+//                    }
+//                    if ((charaProp & BluetoothGattCharacteristic.PROPERTY_READ) > 0) {
+//                        // 通过Gatt对象读取特定特征（Characteristic）的特征值
+//                        mBluetoothGatt.readCharacteristic(gattCharacteristic);
+//                    }
                 }
             }
 
@@ -218,6 +218,10 @@ public class GattPrintManager extends BasePrintManager {
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    boolean request = mBluetoothGatt.requestMtu(512);
+                    System.out.println("requestMtu=>" + request);
+                }
                 mHandler.obtainMessage(ConnectStatus.STATE_CONNECTED, -1, -1, null).sendToTarget();
             }
         }
@@ -262,7 +266,11 @@ public class GattPrintManager extends BasePrintManager {
         @Override
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
             super.onMtuChanged(gatt, mtu, status);
-            LogUtils.d(String.format("%s->%s", "onMtuChanged", String.valueOf(mtu)));
+            GattPrintManager.this.mtu = mtu;
+            if (GattPrintManager.this.mtu > 100) {
+                GattPrintManager.this.mtu = GattPrintManager.this.mtu - GattPrintManager.this.mtu % 100;
+            }
+            LogUtils.d(String.format("%s->%s", "onMtuChanged", String.valueOf(GattPrintManager.this.mtu)));
         }
     }
 }

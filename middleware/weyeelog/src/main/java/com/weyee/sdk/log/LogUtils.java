@@ -20,7 +20,7 @@ public final class LogUtils {
     }
 
     private static class Holder {
-        private static ILogger sILogger = new Logger();
+        private static ILogger sILogger = new Timber();
         //Holder.sILogger = new Timber();
     }
 
