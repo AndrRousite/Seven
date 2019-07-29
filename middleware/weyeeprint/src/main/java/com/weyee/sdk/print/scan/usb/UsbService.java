@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import androidx.annotation.Nullable;
-import com.blankj.utilcode.util.LogUtils;
 import com.weyee.sdk.util.Tools;
 
 import java.util.*;
@@ -23,7 +22,7 @@ import java.util.*;
  */
 public class UsbService extends Service implements IUsbAble {
 
-    private static final String ACTION_USB_DEVICE_PERMISSION = "com.weyee.sdk.usb.USB_PERMISSION";
+
     private final IBinder mBinder = new UsbService.LocalBinder();
 
     private UsbManager usbManager;
@@ -49,7 +48,6 @@ public class UsbService extends Service implements IUsbAble {
 
         usbReceiver = new UsbReceiver();
         IntentFilter usbFilter = new IntentFilter();
-        usbFilter.addAction(ACTION_USB_DEVICE_PERMISSION);
         usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
         usbFilter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
         Tools.getApp().registerReceiver(usbReceiver, usbFilter);
@@ -121,16 +119,16 @@ public class UsbService extends Service implements IUsbAble {
                     case UsbManager.ACTION_USB_DEVICE_DETACHED:
                         mHandler.obtainMessage(CHANGE, -1, -1, null).sendToTarget();
                         break;
-                    case ACTION_USB_DEVICE_PERMISSION:
-                        UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-                        if (device != null) {
-                            if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
-                                LogUtils.d("USBReceiver: " + "获取权限成功：" + device.getDeviceName());
-                            } else {
-                                LogUtils.d("USBReceiver: " + "获取权限失败：" + device.getDeviceName());
-                            }
-                        }
-                        break;
+//                    case ACTION_USB_DEVICE_PERMISSION:
+//                        UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+//                        if (device != null) {
+//                            if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+//                                LogUtils.d("USBReceiver: " + "获取权限成功：" + device.getDeviceName());
+//                            } else {
+//                                LogUtils.d("USBReceiver: " + "获取权限失败：" + device.getDeviceName());
+//                            }
+//                        }
+//                        break;
                     default:
                         break;
                 }

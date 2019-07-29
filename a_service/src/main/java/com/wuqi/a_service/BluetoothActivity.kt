@@ -118,7 +118,7 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
             if (data is BluetoothDevice && data.bondState != BluetoothDevice.BOND_BONDED) {
                 printLines(data.address)
             } else if (data is UsbDevice) {
-                ToastUtils.show("这是一台USB设备")
+                printLines("USB${data.vendorId}|${data.productId}")
             }
         }) {
             override fun getHolder(v: View, viewType: Int): BaseHolder<Any> {
@@ -140,7 +140,6 @@ class BluetoothActivity : BaseActivity<BasePresenter<BaseModel, IView>>() {
                             }
                             is UsbDevice -> {
                                 setText(R.id.tvName, data.deviceName)
-                                setText(R.id.tvAddress, "${data.productId}+${data.vendorId}")
                                 setVisible(R.id.tvPrint, View.GONE)
                             }
                             else -> {

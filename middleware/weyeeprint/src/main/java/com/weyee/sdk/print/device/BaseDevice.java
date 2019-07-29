@@ -70,10 +70,12 @@ public abstract class BaseDevice implements IPrintAble, IConnectAble {
             address = address.replace("TTYS", "ttyS").replace("TTYUSB", "ttyUSB").replace("S3C2410_SERIAL", "s3c2410_serial");
             port = MNumberUtil.convertToint(var1.substring(length + 1));
             printType = PrintType.SATA;
-        } else if (Pattern.compile("USB[0-9]").matcher(var1).matches()) {
+        } else if (Pattern.compile("USB[0-9]+\\|[0-9]+").matcher(var1).matches()) {
             // USB
-            address = null;
-            port = MNumberUtil.convertToint(var1.replace("USB", ""));
+            var1 = var1.replace("USB", "");
+            int length = var1.indexOf(124);
+            address = var1.substring(0, length);
+            port = MNumberUtil.convertToint(var1.substring(length + 1));
             printType = PrintType.USB;
         } else {
             // throw new Exception("该设备不支持");
