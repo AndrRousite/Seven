@@ -34,4 +34,5 @@ public class Path {
     public static final String Jetpack = "/jetpack/";
     public static final String Service = "/service/";
     public static final String Browser = "/browser/";
+    public static final String Battery = "/battery/";
 }

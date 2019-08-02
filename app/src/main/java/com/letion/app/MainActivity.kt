@@ -56,7 +56,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
     private var receiver: BroadcastReceiver? = null
 
     companion object {
-        const val SIZE = 48
+        const val SIZE = 49
     }
 
     /**
@@ -220,6 +220,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
                     }
                     46 -> {
                         WorkerNavigation(this@MainActivity).toBluetoothActivity()
+                    }
+                    47 -> {
+                        BatteryNavigation(this@MainActivity).toBatteryActivity()
                     }
                     else -> {
                         Bus.getDefault().get<IEvent>(1)?.value = NormalEvent()

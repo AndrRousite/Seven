@@ -4,6 +4,8 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import com.blankj.utilcode.util.ProcessUtils;
+import com.squareup.leakcanary.LeakCanary;
+import com.wuqi.a_battery.Utils;
 
 /**
  * 通过开启服务来完成Application中的耗时操作
@@ -50,13 +52,14 @@ public class InitializeService extends IntentService {
 
             //DoraemonKit.install(application);
 
+            Utils.Companion.init();
 
         }
-//        if (LeakCanary.isInAnalyzerProcess(getApplication())) {
-//            // This process is dedicated to LeakCanary for heap analysis.
-//            // You should not init your app in this process.
-//            return;
-//        }
-//        LeakCanary.install(getApplication());
+        if (LeakCanary.isInAnalyzerProcess(getApplication())) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(getApplication());
     }
 }
