@@ -38,6 +38,8 @@ dependencies {
     implementation project(':middleware:weyeetoast')
     implementation project(':middleware:weyeelog')
     compileOnly project(':middleware:weyeeutil')
+
+    //implementation files('libs/ZQPrinterSDK.jar')
 }
 
 apply from : '../../maven.gradle'

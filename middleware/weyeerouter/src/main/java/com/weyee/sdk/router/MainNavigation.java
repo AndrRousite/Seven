@@ -2,6 +2,7 @@ package com.weyee.sdk.router;
 
 import android.content.Context;
 import android.os.Bundle;
+import com.weyee.possupport.arch.Utils;
 
 /**
  * main模块跳转导航管理类。
@@ -20,6 +21,10 @@ public class MainNavigation extends Navigation {
     @Override
     protected String getModuleName() {
         return MODULE_NAME;
+    }
+
+    public void toMainActivity() {
+        startActivity(Utils.ANIM_STYLE_NONE, "Main");
     }
 
     public void toTranslucentActivity(int activityAnimStyle) {

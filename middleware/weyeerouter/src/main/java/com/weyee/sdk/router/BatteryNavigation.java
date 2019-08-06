@@ -24,4 +24,8 @@ public class BatteryNavigation extends Navigation {
     public void toBatteryActivity() {
         startActivity("Battery");
     }
+
+    public void toFingerprintActivity() {
+        startActivity("Fingerprint");
+    }
 }

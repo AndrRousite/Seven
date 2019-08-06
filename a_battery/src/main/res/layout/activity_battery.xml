@@ -2,14 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:ignore="MissingConstraints"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        tools:ignore="MissingConstraints"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
         tools:context=".BatteryActivity">
 
-    <com.wuqi.a_battery.BatteryView android:layout_width="match_parent" android:layout_height="match_parent"/>
+    <com.wuqi.a_battery.BatteryView android:layout_width="match_parent" android:layout_height="match_parent" android:visibility="gone"/>
 
     <Button
             android:id="@+id/startService"
@@ -35,5 +35,30 @@
             android:onClick="onClick"
             android:visibility="gone"
             android:text="停止服务"
-            android:textSize="13sp" />
+            android:textSize="13sp"/>
+
+    <com.weyee.poswidget.edgetransview.EdgeTransparentView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:edge_width="30dp"
+            android:layout_margin="50dp"
+            app:edge_position="top|bottom">
+
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    android:text="@string/test_str"
+                    android:textColor="#fff"
+                    android:textSize="20sp"/>
+
+        </androidx.core.widget.NestedScrollView>
+    </com.weyee.poswidget.edgetransview.EdgeTransparentView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

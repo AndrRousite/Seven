@@ -58,4 +58,6 @@ dependencies {
     }
 
     implementation project(':poscore')
+
+    implementation 'com.github.ZuoHailong:BiometricPrompt:0.2.3'
 }

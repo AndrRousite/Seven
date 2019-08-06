@@ -3,22 +3,24 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.wuqi.a_battery">
 
+    <uses-sdk tools:overrideLibrary="com.hailong.biometricprompt"/>
+
     <application>
+        <activity android:name=".FingerprintActivity">
+        </activity>
         <activity android:name=".BatteryActivity">
         </activity>
+
         <service android:name=".LocalService"/>
-        <service android:name=".RemoteService"
-                 android:exported="true"
-                 android:enabled="true"
-                 android:process=":remote"/>
-
-
+        <service
+                android:name=".RemoteService"
+                android:enabled="true"
+                android:exported="true"
+                android:process=":remote"/>
         <service android:name=".daemon.HeartBeatService"/>
-
         <service
                 android:name=".daemon.DaemonService"
                 android:process=":daemon"/>
-
         <service
                 android:name=".daemon.JobSchedulerService"
                 android:exported="true"

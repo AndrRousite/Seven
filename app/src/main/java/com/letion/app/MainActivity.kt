@@ -12,6 +12,7 @@ import android.provider.Settings
 import android.view.KeyEvent
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.BarUtils
 import com.blankj.utilcode.util.ServiceUtils
 import com.letion.a_ble.BleActivity
@@ -24,6 +25,7 @@ import com.weyee.poscore.base.ThreadPool
 import com.weyee.poscore.di.component.AppComponent
 import com.weyee.possupport.arch.RxLiftUtils
 import com.weyee.possupport.callback.Callback
+import com.weyee.poswidget.layout.helper.QMUIStatusBarHelper
 import com.weyee.sdk.api.rxutil.RxJavaUtils
 import com.weyee.sdk.dialog.LoadingDialog
 import com.weyee.sdk.event.Bus
@@ -44,6 +46,7 @@ import org.json.JSONObject
 import java.nio.charset.Charset
 import java.util.*
 
+@Route(path = Path.MAIN + "Main")
 class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 
     private val CHOOSE = 1
@@ -56,7 +59,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
     private var receiver: BroadcastReceiver? = null
 
     companion object {
-        const val SIZE = 49
+        const val SIZE = 50
     }
 
     /**
@@ -78,7 +81,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 //        }.start()
 
         BarUtils.setStatusBarAlpha(this, 0, true)
-        BarUtils.setStatusBarLightMode(this, true)
+        QMUIStatusBarHelper.setStatusBarLightMode(this) // 设置黑色字体
         headerView.isShowMenuLeftBackView(false)
         appBarLayout.setBackgroundDrawable(resources.getDrawable(R.drawable.action_bar_img))
 
@@ -223,6 +226,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
                     }
                     47 -> {
                         BatteryNavigation(this@MainActivity).toBatteryActivity()
+                    }
+                    48 -> {
+                        BatteryNavigation(this@MainActivity).toFingerprintActivity()
                     }
                     else -> {
                         Bus.getDefault().get<IEvent>(1)?.value = NormalEvent()
