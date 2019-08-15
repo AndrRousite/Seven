@@ -44,7 +44,7 @@ public class PrintWriter150mm extends PrintWriter {
     }
 
     /**
-     * 810 = 200 * 3(110最多一行三个) + 70 * 3（一行最多三个）
+     * 810 = 200 * 3(150最多一行三个) + 70 * 3（一行最多三个）
      * @return
      */
     @Override

@@ -85,7 +85,7 @@ public abstract class BaseDevice implements IPrintAble, IConnectAble {
         if (able == null) {
             switch (printType) {
                 case PrintType.BLE:
-                    iExternalAble = new GattPrintManager();
+                    iExternalAble = new BlePrintManager();
                     break;
                 case PrintType.USB:
                     iExternalAble = new UsbPrintManager();

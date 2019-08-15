@@ -66,7 +66,7 @@ public class BluetoothUtils {
      * 绑定服务
      */
     public void bindService() {
-        ServiceUtils.bindService(BluetoothLeService.class, serviceConnection, Context.BIND_AUTO_CREATE);
+        ServiceUtils.bindService(BluetoothClassicService.class, serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     /**
