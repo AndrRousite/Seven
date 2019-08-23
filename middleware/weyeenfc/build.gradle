@@ -1,10 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
-apply plugin: 'com.jakewharton.butterknife'
 
 def androidConfig = rootProject.ext.android
 def libsConfig = rootProject.ext.libs
@@ -17,12 +14,6 @@ android {
         versionCode androidConfig.versionCode
         versionName androidConfig.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName(), AROUTER_GENERATE_DOC: "enable"]
-            }
-        }
     }
 
     buildTypes {
@@ -36,28 +27,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
-
-    implementation project(':poscore')
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_core"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_core"
+    androidTestImplementation libsConfig.testRunner
+    androidTestImplementation libsConfig.testEspresso
+    implementation libsConfig.appcompat_v7
 
-    kapt libsConfig.arouterCompiler
-    kapt libsConfig.butterknifeCompiler
-    kapt libsConfig.dagger2Compiler
-
-    implementation 'jp.co.cyberagent.android:gpuimage:2.0.3'
-
-    compileOnly(libsConfig.glide) {
-        exclude group: "com.android.support"
-    }
 }
+
+apply from : '../../maven.gradle'

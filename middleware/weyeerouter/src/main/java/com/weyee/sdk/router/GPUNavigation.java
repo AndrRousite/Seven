@@ -59,4 +59,8 @@ public class GPUNavigation extends Navigation {
     public void toImageActivity() {
         startActivity("Image");
     }
+
+    public void toImageHandleActivity() {
+        startActivity("ImageHandle");
+    }
 }

@@ -28,4 +28,8 @@ public class BatteryNavigation extends Navigation {
     public void toFingerprintActivity() {
         startActivity("Fingerprint");
     }
+
+    public void toNfcActivity() {
+        startActivity("Nfc");
+    }
 }

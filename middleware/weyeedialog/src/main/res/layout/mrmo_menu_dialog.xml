@@ -10,7 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView android:layout_width="match_parent"
                                                android:id="@+id/recyclerView"
                                                tools:scrollbars="vertical"
-                                               android:scrollbars="none"
+                                               android:scrollbars="vertical"
                                                android:layout_height="wrap_content"/>
 
 </FrameLayout>

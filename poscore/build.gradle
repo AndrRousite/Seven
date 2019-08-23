@@ -102,6 +102,7 @@ dependencies {
     api project(':middleware:weyeeutil')
     api project(':middleware:weyeeaspectj')
     api project(':middleware:weyeeprint')
+    api project(':middleware:weyeenfc')
     api project(':possupport')
     api project(':poswidget')
 

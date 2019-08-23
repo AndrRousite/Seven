@@ -59,7 +59,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
     private var receiver: BroadcastReceiver? = null
 
     companion object {
-        const val SIZE = 50
+        const val SIZE = 52
     }
 
     /**
@@ -229,6 +229,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
                     }
                     48 -> {
                         BatteryNavigation(this@MainActivity).toFingerprintActivity()
+                    }
+                    49 -> {
+                        GPUNavigation(this@MainActivity).toImageHandleActivity()
+                    }
+                    50 -> {
+                        BatteryNavigation(this@MainActivity).toNfcActivity()
                     }
                     else -> {
                         Bus.getDefault().get<IEvent>(1)?.value = NormalEvent()

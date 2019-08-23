@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.weyee.possupport">
+          xmlns:tools="http://schemas.android.com/tools" package="com.weyee.possupport">
 
-    <application>
+    <application android:networkSecurityConfig="@xml/network_security_config" tools:ignore="UnusedAttribute">
 
 
         <!--auto size  Android 屏幕适配方案 DP SP 适配-->

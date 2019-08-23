@@ -32,7 +32,7 @@ android {
         renderscriptSupportModeEnabled true
 
         ndk {
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a", "x86", "x86_64"
         }
 
         flavorDimensions "default"

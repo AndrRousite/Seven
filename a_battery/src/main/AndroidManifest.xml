@@ -6,6 +6,8 @@
     <uses-sdk tools:overrideLibrary="com.hailong.biometricprompt"/>
 
     <application>
+        <activity android:name=".NfcActivity">
+        </activity>
         <activity android:name=".FingerprintActivity">
         </activity>
         <activity android:name=".BatteryActivity">
