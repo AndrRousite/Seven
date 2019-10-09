@@ -20,7 +20,16 @@ package com.weyee.sdk.util;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import com.blankj.utilcode.util.*;
+
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.DeviceUtils;
+import com.blankj.utilcode.util.EncryptUtils;
+import com.blankj.utilcode.util.FileUtils;
+import com.blankj.utilcode.util.NetworkUtils;
+import com.blankj.utilcode.util.PhoneUtils;
+import com.blankj.utilcode.util.ScreenUtils;
+import com.blankj.utilcode.util.SizeUtils;
+import com.blankj.utilcode.util.Utils;
 import com.weyee.sdk.util.device.DeviceHelper;
 
 import java.io.File;
@@ -79,5 +88,9 @@ public class Tools {
 
     public static String getDeviceInfo() {
         return DeviceHelper.getDeviceInfo();
+    }
+
+    public static NetworkUtils.NetworkType getNetworkType(){
+        return NetworkUtils.getNetworkType();
     }
 }

@@ -1,69 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.wuqi.a_service">
+        package="com.wuqi.a_service">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
-    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true"/>
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-feature
+            android:name="android.hardware.bluetooth_le"
+            android:required="true" />
+
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application>
-        <activity android:name=".BluetoothActivity">
-        </activity>
+        <activity android:name=".NetworkActivity"></activity>
+        <activity android:name=".BluetoothActivity"></activity>
 
-        <service android:name=".StickService"/>
+        <service android:name=".StickService" />
 
-        <activity android:name=".WorkerActivity">
-        </activity>
-        <activity android:name=".WanActivity">
-        </activity> <!-- <receiver android:name=".SmsReceiver" tools:ignore="ExportedReceiver"> -->
+        <activity android:name=".WorkerActivity"></activity>
+        <activity android:name=".WanActivity"></activity> <!-- <receiver android:name=".SmsReceiver" tools:ignore="ExportedReceiver"> -->
         <!-- <intent-filter android:priority="1000"> -->
         <!-- <action android:name="android.provider.Telephony.SMS_RECEIVED"/> -->
         <!-- </intent-filter> -->
         <!-- </receiver> -->
-        <activity android:name=".LocationActivity">
-        </activity>
-        <activity android:name=".BitmapActivity">
-        </activity>
+        <activity android:name=".LocationActivity"></activity>
+        <activity android:name=".BitmapActivity"></activity>
         <activity
                 android:name=".SearchActivity"
                 android:launchMode="singleTop"
                 android:theme="@style/Theme.Transparent">
             <intent-filter>
-                <action android:name="android.intent.action.SEARCH"/>
+                <action android:name="android.intent.action.SEARCH" />
 
-                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
                     android:name="android.app.searchable"
-                    android:resource="@xml/searchable"/>
+                    android:resource="@xml/searchable" />
         </activity>
 
         <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".SearchActivity"/>
+                android:value=".SearchActivity" />
 
-        <activity android:name=".DetailActivity">
-        </activity>
-        <activity android:name=".UILayoutActivity">
-        </activity>
-        <activity android:name=".TabLayoutActivity">
-        </activity>
-        <activity android:name=".tabhost.TabHostActivity">
-        </activity>
-        <activity android:name=".LotteryActivity">
-        </activity>
-        <activity android:name=".MachineActivity">
-        </activity>
-        <activity android:name=".LotteryDetailActivity">
-        </activity>
-        <activity android:name=".WeChatActivity">
-        </activity>
+        <activity android:name=".DetailActivity"></activity>
+        <activity android:name=".UILayoutActivity"></activity>
+        <activity android:name=".TabLayoutActivity"></activity>
+        <activity android:name=".tabhost.TabHostActivity"></activity>
+        <activity android:name=".LotteryActivity"></activity>
+        <activity android:name=".MachineActivity"></activity>
+        <activity android:name=".LotteryDetailActivity"></activity>
+        <activity android:name=".WeChatActivity"></activity>
     </application>
 
 </manifest>

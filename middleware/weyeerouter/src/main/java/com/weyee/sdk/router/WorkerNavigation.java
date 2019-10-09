@@ -75,4 +75,8 @@ public class WorkerNavigation extends Navigation {
     public void toBluetoothActivity() {
         startActivity("Bluetooth");
     }
+
+    public void toNetworkActivity() {
+        startActivity("Network");
+    }
 }

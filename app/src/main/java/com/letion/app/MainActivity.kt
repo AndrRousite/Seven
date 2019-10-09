@@ -59,7 +59,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
     private var receiver: BroadcastReceiver? = null
 
     companion object {
-        const val SIZE = 52
+        const val SIZE = 53
     }
 
     /**
@@ -235,6 +235,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
                     }
                     50 -> {
                         BatteryNavigation(this@MainActivity).toNfcActivity()
+                    }
+                    51 -> {
+                        WorkerNavigation(this@MainActivity).toNetworkActivity()
                     }
                     else -> {
                         Bus.getDefault().get<IEvent>(1)?.value = NormalEvent()

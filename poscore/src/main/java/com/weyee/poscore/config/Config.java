@@ -10,6 +10,7 @@ import com.weyee.sdk.api.rxutil.task.RxUITask;
 import com.weyee.sdk.log.Environment;
 import com.weyee.sdk.log.LogUtils;
 import com.weyee.sdk.multitype.RefreshUtils;
+import com.weyee.sdk.network.NetworkManager;
 import com.weyee.sdk.player.PlayerUtils;
 import com.weyee.sdk.router.RouterManager;
 import com.weyee.sdk.toast.ToastUtils;
@@ -83,6 +84,9 @@ public class Config {
         PlayerUtils.init(application);
 
         RefreshUtils.init();
+
+        // 全局监听网络连接
+        NetworkManager.SingletonHolder.getInstance().init(application);
 
 
 //        System.out.println("执行了几次了");

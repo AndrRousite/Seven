@@ -104,6 +104,7 @@ dependencies {
     api project(':middleware:weyeeprint')
     api project(':middleware:weyeenfc')
     api project(':middleware:libWSLive')
+    api project(':middleware:libnetwork')
     api project(':possupport')
     api project(':poswidget')
 
