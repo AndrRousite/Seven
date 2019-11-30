@@ -1,23 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.wuqi.a_gpuimage">
+        package="com.wuqi.a_gpuimage">
 
     <application>
-        <activity android:name=".ImageHandleActivity">
-        </activity>
-        <activity android:name=".GPUActivity">
-        </activity>
+        <activity android:name=".MapViewActivity"></activity>
+        <activity android:name=".ImageHandleActivity"></activity>
+        <activity android:name=".GPUActivity"></activity>
         <activity
                 android:name=".VideoActivity"
                 android:configChanges="keyboardHidden|orientation|screenSize"
-                android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".AudioActivity">
-        </activity>
-        <activity android:name=".MediaActivity">
-        </activity>
-        <activity android:name=".ImageActivity">
-        </activity>
+                android:screenOrientation="portrait"></activity>
+        <activity android:name=".AudioActivity"></activity>
+        <activity android:name=".MediaActivity"></activity>
+        <activity android:name=".ImageActivity"></activity>
     </application>
 
 </manifest>

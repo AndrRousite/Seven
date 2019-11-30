@@ -10,7 +10,7 @@ import android.content.pm.PackageManager
 import android.os.*
 import android.provider.Settings
 import android.view.KeyEvent
-import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.blankj.utilcode.util.BarUtils
@@ -45,6 +45,7 @@ import me.leolin.shortcutbadger.ShortcutBadger
 import org.json.JSONObject
 import java.nio.charset.Charset
 import java.util.*
+import kotlin.math.abs
 
 @Route(path = Path.MAIN + "Main")
 class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
@@ -59,7 +60,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
     private var receiver: BroadcastReceiver? = null
 
     companion object {
-        const val SIZE = 53
+        const val SIZE = 54
     }
 
     /**
@@ -102,11 +103,12 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
             "http://img.weyee.com/weyee_score_2016_20180906104526564400"
         )
 
-        listView.adapter = ArrayAdapter<String>(baseContext, android.R.layout.simple_list_item_1, array)
-
-        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, i, _ ->
+        listView.adapter =
+            ArrayAdapter<String>(baseContext, android.R.layout.simple_list_item_1, array)
+        listView.onItemClickListener = OnItemClickListener { _, _, i, _ ->
             run {
-                when (i) {
+
+                when (abs(i - SIZE)) {
                     0 -> App.obtainAppComponentFromContext(this@MainActivity).navigation().obtainNavigation(
                         MainNavigation::class.java
                     ).toPhotoViewActivity(urls)
@@ -239,6 +241,9 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
                     51 -> {
                         WorkerNavigation(this@MainActivity).toNetworkActivity()
                     }
+                    52 -> {
+                        GPUNavigation(this@MainActivity).toMapViewActivity()
+                    }
                     else -> {
                         Bus.getDefault().get<IEvent>(1)?.value = NormalEvent()
                         Bus.getDefault().post(NormalEvent())
@@ -249,7 +254,7 @@ class MainActivity : BaseActivity<MainPresenter>(), MainContract.MainView {
 
         Bus.getDefault().subscribe(this, "RxBus", null, com.weyee.sdk.event.Callback<NormalEvent> {
             println("RxBus")
-            setAlias1()
+            //setAlias1()
         })
 
         Bus.getDefault().get<IEvent>(1)?.observe(this, androidx.lifecycle.Observer {

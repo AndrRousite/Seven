@@ -36,6 +36,8 @@ android {
         }
 
         flavorDimensions "default"
+
+        vectorDrawables.useSupportLibrary = true
     }
 //    productFlavors {
 //        pro {
