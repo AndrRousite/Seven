@@ -16,6 +16,7 @@ ext {
 
     dependVersion = [
             androidXSdkVersion        : "1.0.0",
+            recyclerViewV7XSdkVersion : "1.2.0-alpha03",
             workerSdkVersion          : "2.0.0",
             constraintLayoutSdkVersion: "2.0.0-alpha2",
             lifecycleSdkVersion       : "2.0.0",
@@ -57,7 +58,7 @@ ext {
             core_v7                 : "androidx.core:core:$dependVersion.androidXSdkVersion",
             fragment_v7             : "androidx.fragment:fragment:$dependVersion.androidXSdkVersion",
             appcompat_v7            : "androidx.appcompat:appcompat:$dependVersion.androidXSdkVersion",
-            recyclerview_v7         : "androidx.recyclerview:recyclerview:$dependVersion.androidXSdkVersion",
+            recyclerview_v7         : "androidx.recyclerview:recyclerview:$dependVersion.recyclerViewV7XSdkVersion",
             material_v7             : "com.google.android.material:material:$dependVersion.androidXSdkVersion",
             palette_v7              : "androidx.palette:palette:$dependVersion.androidXSdkVersion",
             work_v7                 : "androidx.work:work-runtime:$dependVersion.workerSdkVersion",

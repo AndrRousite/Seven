@@ -114,7 +114,7 @@
     <androidx.core.widget.ContentLoadingProgressBar android:layout_width="match_parent"
                                                     android:layout_gravity="bottom"
                                                     android:id="@+id/pbLoading"
-                                                    style="?android:attr/android:progressBarStyleHorizontal"
+                                                    style="?attr/android:progressBarStyleHorizontal"
                                                     tools:progress="50"
                                                     android:max="100"
                                                     android:visibility="gone"

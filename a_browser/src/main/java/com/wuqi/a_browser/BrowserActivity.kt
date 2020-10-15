@@ -28,6 +28,19 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
     private lateinit var url: String
     private var sonicSession: SonicSession? = null
 
+    private val js =
+        "function androidBack(){" +
+                "if(typeof xxx != \"undefined\" && typeof xxx == \"function\")" +
+
+                "{" +
+                "return \"success\"" +
+                "}else{" +
+                "return null" +
+                "}" +
+
+
+                "}"
+
     override fun setupActivityComponent(appComponent: AppComponent?) {
     }
 
@@ -39,12 +52,46 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
 
         headerView.setTitle("加载中...", Gravity.LEFT or Gravity.CENTER_VERTICAL)
 
+        headerView.isShowMenuRightOneView(true)
+        headerView.setMenuRightOneIcon(android.R.drawable.ic_menu_add)
+        headerView.setOnClickRightMenuOneListener {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    webView.evaluateJavascript("javascript:androidBack()") {
+                        println(it)
+                        if("success" == it){
+                            //
+                        }else{
+                            com.weyee.sdk.toast.ToastUtils.show("xxx方法不存在")
+                            if (webView.canGoBack()) {
+                                webView.goBack()
+                            } else {
+                                finish()
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                com.weyee.sdk.toast.ToastUtils.show("xxx方法不存在")
+                e.printStackTrace()
+                if (webView.canGoBack()) {
+                    webView.goBack()
+                } else {
+                    finish()
+                }
+            }
+        }
+
         // step 1: Initialize sonic engine if necessary, or maybe u can do this when application created
         if (!SonicEngine.isGetInstanceAllowed()) {
-            SonicEngine.createInstance(SonicRuntimeImpl(Utils.getApp()), SonicConfig.Builder().build())
+            SonicEngine.createInstance(
+                SonicRuntimeImpl(Utils.getApp()),
+                SonicConfig.Builder().build()
+            )
         }
         // step 2: Create SonicSession
-        sonicSession = SonicEngine.getInstance().createSession(url, SonicSessionConfig.Builder().build())
+        sonicSession =
+            SonicEngine.getInstance().createSession(url, SonicSessionConfig.Builder().build())
         if (null != sonicSession) {
             sonicSession?.bindClient(SonicClientImpl())
         } else {
@@ -58,7 +105,10 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
         // runtime、init configs....
         webView.webViewClient = object : WebViewClient() {
             @SuppressLint("RtlHardcoded")
-            override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
                 headerView.setTitle("加载中...", Gravity.LEFT or Gravity.CENTER_VERTICAL)
                 return super.shouldOverrideUrlLoading(view, request)
             }
@@ -77,12 +127,27 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
             }
 
             @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-            override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
+            override fun shouldInterceptRequest(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): WebResourceResponse? {
                 return sonicSession?.sessionClient?.requestResource(request?.url?.toString()) as WebResourceResponse?
             }
 
-            override fun shouldInterceptRequest(view: WebView?, url: String?): WebResourceResponse? {
+            override fun shouldInterceptRequest(
+                view: WebView?,
+                url: String?
+            ): WebResourceResponse? {
                 return sonicSession?.sessionClient?.requestResource(url) as WebResourceResponse?
+            }
+
+            override fun onReceivedHttpError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                errorResponse: WebResourceResponse?
+            ) {
+                super.onReceivedHttpError(view, request, errorResponse)
+                LogUtils.d("加载出错了~")
             }
 
             /**
@@ -92,7 +157,12 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
              * @param request
              * @param error
              */
-            override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
+            @RequiresApi(Build.VERSION_CODES.M)
+            override fun onReceivedError(
+                view: WebView,
+                request: WebResourceRequest,
+                error: WebResourceError
+            ) {
                 super.onReceivedError(view, request, error)
                 //view.loadUrl("file:///android_asset/error.html");
                 LogUtils.d("加载出错了~")
@@ -106,7 +176,12 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
              * @param description
              * @param failingUrl
              */
-            override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
+            override fun onReceivedError(
+                view: WebView,
+                errorCode: Int,
+                description: String,
+                failingUrl: String
+            ) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
                 // @Deprecated js加载错误也会导致加载error.html ，so remove.
                 //view.loadUrl("file:///android_asset/error.html");
@@ -118,6 +193,7 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
                 super.onProgressChanged(view, newProgress)
                 LogUtils.d(String.format("加载进度: %d", newProgress))
             }
+
         }
 
         val webSettings = webView.settings
@@ -201,6 +277,8 @@ class BrowserActivity : BaseActivity<BrowserPresenter>(), IView {
                     "}" +
                     "})()"
         )
+
+        webView.loadUrl("javascript:$js")
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

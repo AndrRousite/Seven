@@ -33,6 +33,7 @@ class TabLayoutActivity : BaseActivity<WanPresenter>(), WanContract.TabLayoutVie
 
     override fun initView(savedInstanceState: Bundle?) {
         tabLayout.setupWithViewPager(viewPager)
+        viewPager.offscreenPageLimit = 5
         viewPager.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
             override fun getItem(position: Int): Fragment {
                 return fragments[position]
